@@ -73,21 +73,5 @@
 └── README.md             # Projektbeschreibung (diese Datei)
 ```
 
-## Beitrag leisten
-1. Forke das Repository.
-2. Erstelle einen neuen Branch:  
-   ```
-   git checkout -b feature/mein-feature
-   ```
-3. Änderungen vornehmen und committen:
-   ```bash
-   git commit -m "Füge mein Feature hinzu"
-   ```
-4. Branch pushen und Pull Request öffnen:
-   ```
-   git push origin feature/mein-feature
-   ```
-5. Pull Request wird geprüft und ggf. gemerged.
-
 ## Lizenz
 Dieses Projekt steht unter der MIT-Lizenz. Details sind in der Datei `LICENSE` zu finden.
