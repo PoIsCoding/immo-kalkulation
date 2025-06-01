@@ -15,6 +15,10 @@
 <body>
   <div class="container">
     <h1>Ergebnisse</h1>
+    <p>Diese Liste zeigt dir an, welche Kosten du zu erwarten hast. Am PC kannst du mit der Maus über den Titel hovern, damit dir eine kleine weitere Info angezeigt wird. Zudem findest du unten die Erklärung der Spalten</p>
+    <p><span style="color: green;">Grün</span> zeigt dir den Immobilienpreis an, nach dem du Ausschau halten kannst.</p>
+    <p><span style="color: red;">Rot</span> werden die Zeilen angezeigt, die dein monatliches Budget überschreiten würden.</p>
+    <p>Hier sind die Ergebnisse basierend auf den eingegebenen Parametern:</p>
     <!-- <p>Hinweise: ± 10 % Varianz, keine Gewährleistung für die Angaben und sind als Richtwerte zu verstehen.</p> -->
     <div id="results-container"></div>
     <div class="block submit-block">
@@ -231,10 +235,46 @@
     document.getElementById('results-container').innerHTML = calculateResultsFromParams();
   </script>
 
+<div class="container">
+    <h2>Ergebnisse im Detail</h2>
+    <p>Die Tabelle zeigt die finanziellen Auswirkungen der verschiedenen Blöcke und Laufzeiten. Die Spalten sind wie folgt:</p>
+  <h3>Erklärung der Spalten</h3>
+    <ul>
+      <li><strong>Laufzeit in Jahren:</strong> Die Dauer des Darlehens in Jahren.</li>
+      <li><strong>Zinssatz:</strong> Der nominale Jahreszinssatz in Prozent.</li>
+      <li><strong>Monatliche Rate:</strong> Die monatliche Rate, die du zahlen musst.</li>
+      <li><strong>Darlehenssumme:</strong> Die Gesamtsumme des Darlehens.</li>
+      <li><strong>Gesamtzinsen:</strong> Die gesamten Zinsen, die du über die Laufzeit zahlst.</li>
+      <li><strong>Zinsanteil:</strong> Der Anteil der Zinsen an der Gesamtrückzahlung.</li>
+      <li><strong>Rückzahlung an Bank:</strong> Die gesamte Summe, die du an die Bank zurückzahlst.</li>
+      <li><strong>Kaufpreis netto:</strong> Der Netto-Kaufpreis abzüglich der Kaufnebenkosten und plus Eigenkapital.</li>
+      <li><strong>Eigenanteil:</strong> Der prozentuale Anteil deines Eigenkapitals am Kaufpreis.</li>
+      <li><strong>Eigenanteil (€):</strong> Der Betrag deines Eigenkapitals in Euro.</li>
+      <li><strong>Grunderwerbssteuer:</strong> Die Grunderwerbssteuer auf den Kaufpreis.</li>
+      <li><strong>Grundbucheintragung:</strong> Kosten für die Eintragung ins Grundbuch.</li>
+      <li><strong>Kredit-/Hypothekeneintragung:</strong> Kosten für die Eintragung des Kredits oder der Hypothek.</li>
+      <li><strong>Maklerkosten:</strong> Kosten für den Makler, falls vorhanden, inklusive Mehrwertsteuer.</li>
+      <li><strong>Notar-/Rechtsanwalt:</strong> Notar- und Rechtsanwaltskosten inklusive Mehrwertsteuer.</li>
+      <li><strong>Sonstige Kosten:</strong> Diverse Gebühren und Versicherungen.</li>
+      <li><strong>Ges. Kaufnebenkosten:</strong> Summe aller Kaufnebenkosten.</li>
+      <li><strong>KNK-Anteil %:</strong> Der prozentuale Anteil der Kaufnebenkosten am Kaufpreis netto.</li>
+      <li><strong>Kaufkosten Brutto:</strong> Die gesamten Kaufkosten inklusive Eigenkapital und Darlehenssumme.</li>
+      <li><strong>Betriebskosten (monatl.):</strong> Monatliche Betriebskosten basierend auf dem Kaufpreis.</li>
+      <li><strong>Gesamtbelastung (monatl.):</strong> Die monatliche Gesamtbelastung inklusive Betriebskosten.</li>
+      <li><strong>Belastung-Anteil (%):</strong> Der prozentuale Anteil der monatlichen Gesamtbelastung am Nettoeinkommen.</li>
+      <li><strong>Gesamtbelastung inkl. Fixkosten (monatl.):</strong> Die monatliche Gesamtbelastung inklusive Fixkosten.</li>
+      <li><strong>Aufgelaufene Nebenkosten:</strong> Summe der aufgelaufenen Nebenkosten über die Laufzeit.</li>
+      <li><strong>Nebenkosten-Anteil (%):</strong> Der prozentuale Anteil der aufgelaufenen Nebenkosten am Kaufpreis netto.</li>
+      <li><strong>Betriebskosten gesamt (Laufzeit):</strong> Gesamte Betriebskosten über die Laufzeit des Darlehens.</li>
+      <li><strong>Gesamtbelastung gesamt (Laufzeit):</strong> Die gesamte Belastung über die Laufzeit des Darlehens.</li>
+      <li><strong>Totale Gesamtkosten:</strong> Die gesamten Kosten inklusive aller Belastungen und Kaufkosten.</li>
+    </ul>
+  </div>
+
   <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; color: #666; font-size: 0.9em;">
-      <p>Autor: ©Poramet "PoIsCoding" Bahnschulte</p>
+      <p>Autor: ©Poramet "PoIsCoding" Bahnschulte - v1.2.1</p>
       <p>Hinweis: Die angezeigten Zahlen können um ± 10 % abweichen und dienen nur zur groben Orientierung.</p>
-      <p>Unterstütze mich auf <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener">Buy Me a Coffee</a>.</p>
+      <p>Unterstütze mich auf <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>. Sieh' dir auch <a href="https://github.com/PoIsCoding" target="_blank" rel="noopener noreferrer">meine anderen Projekte</a> an.</p>
     </footer>
 </body>
 </html>

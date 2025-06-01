@@ -53,3 +53,7 @@
 - Neu strukturierte und kommentierte `styles.css`:
   - CSS-Regeln nach Abschnitten (Basis, Layout, Form, Buttons, Fehler, Ergebnistabelle) gruppiert
   - Überflüssige Selektoren zusammengeführt und Kommentare hinzugefügt
+
+## [1.2.1] - 2025-06-01
+### Hinzugefügt
+- Hinzufügen von Mouseover-Beschreibungen und erklärenden Tooltips zu mehreren Spalten in `index.html` und `ergebnisse.html`, um Berechnungsgrundlagen und Annahmen transparenter darzustellen.
