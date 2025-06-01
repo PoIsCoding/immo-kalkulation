@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Potenzieller Immo-Kauf</title>
+  <link rel="icon" type="image/png" href="images/icon.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Potenzieller Immo-Kauf</h1>
+
+    <!-- Eingabensektion -->
+    <section id="inputs">
+      <h2>Eingaben</h2>
+
+      <!-- Nettoeinkommen -->
+      <div class="block">
+        <div class="form-row">
+          <label for="net-income">Nettoeinkommen (€)</label>
+          <input
+            type="text"
+            id="net-income"
+            name="netIncome"
+            placeholder="z.B. 1.234,56"
+          />
+        </div>
+      </div>
+
+      <!-- Block 1 -->
+      <div class="block">
+        <h3>Block 1</h3>
+        <div class="form-row">
+          <label for="max-rate1">Max. Rate 1 (40%)</label>
+          <input
+            type="range"
+            id="max-rate1"
+            name="maxRate1"
+            min="1"
+            max="40"
+            step="1"
+            value="40"
+            class="max-rate-slider"
+            data-index="1"
+          />
+        </div>
+        <div class="form-row slider-value-row">
+          <span id="max-rate1-value">40</span>% = 
+          <span class="abs-value" id="max-rate1-abs">0 €</span>
+        </div>
+        <div class="form-row slider-group">
+          <label for="equity-share1">Eigenkapital 1 (%)</label>
+          <input
+            type="range"
+            id="equity-share1"
+            name="equityShare1"
+            min="20"
+            max="80"
+            step="1"
+            value="20"
+            class="equity-slider"
+            data-index="1"
+          />
+          <span class="slider-value" id="equity-share1-value">20</span>
+        </div>
+        <div class="form-row">
+          <label for="interest-rate1">Zinssatz 1 (%)</label>
+          <input
+            type="number"
+            id="interest-rate1"
+            name="interestRate1"
+            step="0.01"
+            placeholder="z.B. 3,00"
+            value="3"
+          />
+        </div>
+      </div>
+
+      <!-- Block 2 -->
+      <div class="block">
+        <h3>Block 2</h3>
+        <div class="form-row">
+          <label for="max-rate2">Max. Rate 2 (40%)</label>
+          <input
+            type="range"
+            id="max-rate2"
+            name="maxRate2"
+            min="1"
+            max="40"
+            step="1"
+            value="40"
+            class="max-rate-slider"
+            data-index="2"
+          />
+        </div>
+        <div class="form-row slider-value-row">
+          <span id="max-rate2-value">40</span>% = 
+          <span class="abs-value" id="max-rate2-abs">0 €</span>
+        </div>
+        <div class="form-row slider-group">
+          <label for="equity-share2">Eigenkapital 2 (%)</label>
+          <input
+            type="range"
+            id="equity-share2"
+            name="equityShare2"
+            min="20"
+            max="80"
+            step="1"
+            value="20"
+            class="equity-slider"
+            data-index="2"
+          />
+          <span class="slider-value" id="equity-share2-value">20</span>
+        </div>
+        <div class="form-row">
+          <label for="interest-rate2">Zinssatz 2 (%)</label>
+          <input
+            type="number"
+            id="interest-rate2"
+            name="interestRate2"
+            step="0.01"
+            placeholder="z.B. 4,00"
+            value="4"
+          />
+        </div>
+      </div>
+
+      <!-- Block 3 -->
+      <div class="block">
+        <h3>Block 3</h3>
+        <div class="form-row">
+          <label for="max-rate3">Max. Rate 3 (40%)</label>
+          <input
+            type="range"
+            id="max-rate3"
+            name="maxRate3"
+            min="1"
+            max="40"
+            step="1"
+            value="40"
+            class="max-rate-slider"
+            data-index="3"
+          />
+        </div>
+        <div class="form-row slider-value-row">
+          <span id="max-rate3-value">40</span>% = 
+          <span class="abs-value" id="max-rate3-abs">0 €</span>
+        </div>
+        <div class="form-row slider-group">
+          <label for="equity-share3">Eigenkapital 3 (%)</label>
+          <input
+            type="range"
+            id="equity-share3"
+            name="equityShare3"
+            min="20"
+            max="80"
+            step="1"
+            value="20"
+            class="equity-slider"
+            data-index="3"
+          />
+          <span class="slider-value" id="equity-share3-value">20</span>
+        </div>
+        <div class="form-row">
+          <label for="interest-rate3">Zinssatz 3 (%)</label>
+          <input
+            type="number"
+            id="interest-rate3"
+            name="interestRate3"
+            step="0.01"
+            placeholder="z.B. 5,00"
+            value="5"
+          />
+        </div>
+      </div>
+
+      <!-- Kosten & Laufzeiten -->
+      <div class="block">
+        <h3>Kosten &amp; Laufzeiten</h3>
+        <div class="form-row">
+          <label for="monthly-fixed-costs">Monatliche Fixkosten (€)</label>
+          <input
+            type="number"
+            id="monthly-fixed-costs"
+            name="monthlyFixedCosts"
+            placeholder="z.B. 1.234,56"
+            step="0.01"
+          />
+        </div>
+        <div class="form-row">
+          <label for="term1">Laufzeit 1 (Jahre)</label>
+          <input
+            type="number"
+            id="term1"
+            name="term1"
+            placeholder="z.B. 20"
+            value="20"
+          />
+        </div>
+        <div class="form-row">
+          <label for="term2">Laufzeit 2 (Jahre)</label>
+          <input
+            type="number"
+            id="term2"
+            name="term2"
+            placeholder="z.B. 25"
+            value="25"
+          />
+        </div>
+        <div class="form-row">
+          <label for="term3">Laufzeit 3 (Jahre)</label>
+          <input
+            type="number"
+            id="term3"
+            name="term3"
+            placeholder="z.B. 30"
+            value="30"
+          />
+        </div>
+        <div class="form-row">
+          <label for="term4">Laufzeit 4 (Jahre)</label>
+          <input
+            type="number"
+            id="term4"
+            name="term4"
+            placeholder="z.B. 35"
+            value="35"
+          />
+        </div>
+        <div class="form-row">
+          <label for="term5">Laufzeit 5 (Jahre)</label>
+          <input
+            type="number"
+            id="term5"
+            name="term5"
+            placeholder="z.B. 40"
+            value="40"
+          />
+        </div>
+      </div>
+
+      <!-- Button -->
+      <div class="block submit-block">
+        <button type="button" id="calculate-btn">Berechnen</button>
+      </div>
+    </section>
+
+    <!-- Ergebnisse-Sektion -->
+    <section id="results" class="hidden">
+      <h2 id="results-toggle" style="cursor: pointer;">Ergebnisse</h2>
+      <div id="results-table"></div>
+      <div class="block submit-block">
+        <button type="button" id="back-btn">Zurück</button>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; color: #666; font-size: 0.9em;">
+      <p>Autor: ©️Poramet “PoIsCoding” Bahnschulte</p>
+      <p>Hinweis: Die angezeigten Zahlen können um ± 10 % abweichen und dienen nur zur groben Orientierung.</p>
+      <p>Unterstütze mich auf <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener">Buy Me a Coffee</a>.</p>
+    </footer>
+  </div>
+
+  <!-- Externe Skripte -->
+  <script src="js/berechnungen.js"></script>
+  <script>
+    // Hilfsfunktion: Eingabe für Nettoeinkommen filtern
+    function filterNetInput() {
+      const input = document.getElementById('net-income');
+      // Nur Ziffern, Punkt und Komma zulassen
+      input.value = input.value.replace(/[^\d.,]/g, '');
+    }
+
+    // Hilfsfunktion: Nettoeinkommen formatieren (Dezimal- und Tausendertrennzeichen)
+    function formatNetIncome() {
+      const input = document.getElementById('net-income');
+      let raw = input.value.replace(/\./g, '').replace(/,/g, '.');
+      let num = parseFloat(raw) || 0;
+      // Format mit Tausenderpunkt und Komma
+      const parts = num.toFixed(2).split('.');
+      const integerPart = parts[0];
+      const decimalPart = parts[1];
+      input.value = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + decimalPart;
+    }
+
+    // Funktion, um Slider- und Absolutwerte zu aktualisieren
+    function updateSliderValue(sliderId, valueSpanId, absSpanId) {
+      const slider = document.getElementById(sliderId);
+      const raw = document.getElementById('net-income').value.replace(/\./g, '').replace(/,/g, '.');
+      const net = parseFloat(raw) || 0;
+      document.getElementById(valueSpanId).textContent = slider.value;
+      const abs = (net * slider.value / 100).toFixed(2);
+      document.getElementById(absSpanId).textContent = abs.replace('.', ',') + ' €';
+      updateValues();
+    }
+
+    // Register Slider-Events beim Laden
+    document.addEventListener('DOMContentLoaded', function () {
+      // Nettoeinkommen-Events
+      const netIncomeInput = document.getElementById('net-income');
+      netIncomeInput.addEventListener('input', function () {
+        filterNetInput();
+        updateValues();
+        // Update all max-rate sliders' absolute value
+        [1, 2, 3].forEach(i => {
+          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`);
+        });
+      });
+      netIncomeInput.addEventListener('blur', formatNetIncome);
+
+      // Max-Rate-Slider
+      [1, 2, 3].forEach(i => {
+        const slider = document.getElementById(`max-rate${i}`);
+        slider.addEventListener('input', () => {
+          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`);
+        });
+        // Initial update
+        updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`);
+      });
+
+      // Equity-Slider
+      [1, 2, 3].forEach(i => {
+        const slider = document.getElementById(`equity-share${i}`);
+        const span = document.getElementById(`equity-share${i}-value`);
+        slider.addEventListener('input', () => {
+          span.textContent = slider.value;
+          updateValues();
+        });
+        // Initial value
+        span.textContent = slider.value;
+      });
+
+      // Buttons
+      document.getElementById('calculate-btn').addEventListener('click', submitForm);
+      document.getElementById('back-btn').addEventListener('click', () => {
+        window.history.back();
+      });
+    });
+
+    // Formulareinsendung: Weiterleitung zu ergebnisse.html
+    function submitForm() {
+      const params = new URLSearchParams();
+      params.set('netIncome', document.getElementById('net-income').value);
+      [1, 2, 3].forEach(i => {
+        params.set(`maxRate${i}`, document.getElementById(`max-rate${i}`).value);
+        params.set(`equity${i}`, document.getElementById(`equity-share${i}`).value);
+        params.set(`interest${i}`, document.getElementById(`interest-rate${i}`).value);
+      });
+      [1, 2, 3, 4, 5].forEach(i => {
+        params.set(`term${i}`, document.getElementById(`term${i}`).value);
+      });
+      params.set('fixedCosts', document.getElementById('monthly-fixed-costs').value);
+      window.location.href = 'ergebnisse.html?' + params.toString();
+    }
+
+    // Platzhalter-Funktion: Aktualisiert ggf. Interaktive Werte
+    function updateValues() {
+      // Diese Funktion kann erweitert werden, um 
+      // Live-Vorschauen oder Zwischenberechnungen durchzuführen.
+    }
+  </script>
+</body>
+</html>

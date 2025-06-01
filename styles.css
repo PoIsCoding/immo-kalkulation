@@ -1,0 +1,335 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+h1, h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #555;
+}
+.block {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #fdfdfd;
+}
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 10px 20px;
+  margin-bottom: 12px;
+}
+.slider-value-row {
+  grid-column: 1 / span 2;
+  display: flex;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+label {
+  font-weight: 500;
+  color: #333;
+}
+input[type="number"],
+input[type="range"] {
+  padding: 8px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+input[type="range"] {
+  width: 100%;
+}
+.slider-value {
+  font-weight: bold;
+  color: #333;
+}
+.abs-value {
+  font-style: italic;
+  color: #666;
+}
+.submit-block {
+  text-align: center;
+}
+button[type="submit"],
+button[type="button"] {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+}
+button[type="button"]:hover,
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+.error {
+  color: red;
+}
+.error input {
+  border-color: red;
+}
+#results-table {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+.hidden {
+  display: none;
+}
+
+/* Container für Ergebnisse-Tabelle mit vertikaler Scrollbar */
+#results-container {
+  max-height: 800px;      /* Festlegen, wie hoch der sichtbare Bereich sein soll */
+  overflow-y: auto;       /* Vertikal scrollen erlauben */
+  overflow-x: auto;       /* Horizontalen Scrollbalken erlauben */
+  border: 1px solid #ccc; /* Optional: leichte Rahmenlinie um den Scrollbereich */
+}
+
+
+/* Sicheres Zusammenziehen der Tabellenränder */
+#results-container table {
+  border-collapse: collapse;
+}
+/* Alle Zellen mit 1px-Rand, außer col-sep für dicken Rand */
+#results-container table th,
+#results-container table td {
+  border: 1px solid #000;
+}
+/* Entferne alle weiteren border-right-Overrides */
+#results-container table th:nth-child(5),
+#results-container table td:nth-child(5),
+#results-container table th:nth-child(3),
+#results-container table td:nth-child(3),
+#results-container table th:nth-child(7),
+#results-container table td:nth-child(7) {
+  border-right: 1px solid #000 !important;
+}
+/* Dicke schwarze Linie nach der Spalte "Gesamtzahlung an Bank" */
+#results-container table th.col-sep,
+#results-container table td.col-sep {
+  border-right: 3px solid #000 !important;
+}
+
+/* Dicke, farbige Trennlinie nach jedem Block */
+#results-container table tr.block-separator td {
+  border-bottom: 3px solid #000; /* Beispiel: Blaue, 3px dicke Linie */
+}
+
+/* Sicherstellung, dass Zellen mit rowspan die dicke Trennlinie erhalten */
+#results-container table td[rowspan="5"] {
+  border-bottom: 3px solid #000;
+}
+
+
+/* Hebt die Spalte "Kaufpreis netto" hellgrün hervor */
+#results-container table th.col-kaufpreis-netto,
+#results-container table td.col-kaufpreis-netto {
+  background-color: #d4f7d4;
+}
+/* =========================
+   Base Styles
+   ========================= */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+/* =========================
+   Layout: Blocks & Grid
+   ========================= */
+.block {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #fdfdfd;
+}
+
+/* Two-column grid for labels and inputs */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 10px 20px;
+  margin-bottom: 12px;
+}
+
+/* Slider value row spans both columns */
+.slider-value-row {
+  grid-column: 1 / span 2;
+  display: flex;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+/* Ensures submit buttons are centered */
+.submit-block {
+  text-align: center;
+}
+
+/* =========================
+   Form Elements
+   ========================= */
+label {
+  font-weight: 500;
+  color: #333;
+}
+
+input[type="number"],
+input[type="range"],
+input[type="text"] {
+  padding: 8px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+/* Range sliders should fill available width */
+input[type="range"] {
+  width: 100%;
+}
+
+/* Slider value styling */
+.slider-value {
+  font-weight: bold;
+  color: #333;
+}
+
+.abs-value {
+  font-style: italic;
+  color: #666;
+}
+
+/* =========================
+   Buttons
+   ========================= */
+button[type="submit"],
+button[type="button"] {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+  border: none;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+}
+
+button[type="button"]:hover,
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* =========================
+   Error Highlighting
+   ========================= */
+.error {
+  color: red;
+}
+
+.error input {
+  border-color: red;
+}
+
+/* =========================
+   Results Table Container
+   ========================= */
+#results-table {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Scrollable container for results */
+#results-container {
+  max-height: 800px;      /* Visible area height */
+  overflow-y: auto;       /* Vertical scrolling */
+  overflow-x: auto;       /* Horizontal scrolling */
+  border: 1px solid #ccc; /* Optional border */
+}
+
+/* =========================
+   Results Table Styling
+   ========================= */
+/* Ensure borders collapse for a clean look */
+#results-container table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: right;
+}
+
+/* Base cell borders */
+#results-container table th,
+#results-container table td {
+  border: 1px solid #000;
+  padding: 5px;
+}
+
+/* Prevent line breaks in header text */
+#results-container table th {
+  white-space: nowrap;
+}
+
+/* Thick separator to the right of certain columns (col-sep class) */
+#results-container table th.col-sep,
+#results-container table td.col-sep {
+  border-right: 3px solid #000 !important;
+}
+
+/* Thick bottom border for block separators */
+#results-container table tr.block-separator td {
+  border-bottom: 3px solid #000;
+}
+
+/* Ensure rowspan cells show thick bottom border */
+#results-container table td[rowspan="5"] {
+  border-bottom: 3px solid #000;
+}
+
+/* Highlight "Kaufpreis netto" column with light green */
+#results-container table th.col-kaufpreis-netto,
+#results-container table td.col-kaufpreis-netto {
+  background-color: #d4f7d4;
+}
+
+/* Highlight row when totalWithFix exceeds netIncome */
+.over-income td {
+  background-color: #fdd;
+}
