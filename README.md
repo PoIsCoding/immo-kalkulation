@@ -43,24 +43,6 @@
   - Grid-System für Formulareingaben
   - Responsives Design mit scrollbaren Tabellen
 
-## Installation & Nutzung
-1. Repository von GitHub klonen:
-   ```bash
-   git clone https://github.com/DEIN_NUTZERNAME/potenzieller-immo-kauf.git
-   ```
-2. In das Projektverzeichnis wechseln:
-   ```bash
-   cd potenzieller-immo-kauf
-   ```
-3. Dateien lokal hosten, z.B. mit einem einfachen HTTP-Server:
-   - Python 3:
-     ```bash
-     python3 -m http.server 8000
-     ```
-   - Oder VS Code Live Server Extension nutzen.
-4. Im Browser `http://localhost:8000/index.html` öffnen.
-5. Alle Eingabefelder ausfüllen und auf „Berechnen“ klicken, um zur Ergebnis­seite zu gelangen.
-
 ## Dateistruktur
 ```
 ├── index.html            # Eingabemaske
