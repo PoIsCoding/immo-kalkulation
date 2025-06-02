@@ -7,7 +7,7 @@
 
 ## Funktionen
 - **Eingabemaske (`index.html`):**
-  - Nettoeinkommen (mit Formatierung)
+  - Nettoeinkommen pro Szenario (3 Felder, jeweils formatiert)
   - Maximale Monatsrate (Slider, 1–40 %)
   - Eigenkapitalanteil (Slider, 20–80 %)
   - Zinssätze (vorausgefüllt: 3 %, 4 %, 5 %)
@@ -15,6 +15,7 @@
   - Kaufnebenkosten-Sätze (Grunderwerbssteuer, Grundbucheintragung, Hypothekeneintragung, Maklergebühr, Notar-/Rechtsanwaltskosten inkl. 20 % MwSt., sonstige Kosten)
   - Monatliche Fixkosten (frei wählbar)
   - Dynamische Anzeige des Eurobetrags bei Slider-Änderungen
+  - Drei Vergleichsszenarien („Szenario 1“, „Szenario 2“, „Szenario 3“) mit jeweils eigenem Nettoeinkommen sowie Rate, Eigenkapital und Zinssatz
   - Button zum Berechnen der Ergebnisse
 
 - **Ergebnisseite (`ergebnisse.html` & `js/umschalten.js`):**
@@ -35,6 +36,7 @@
   - Hervorhebung von Zeilen in Hellrot, wenn die monatliche Gesamtbelastung inkl. Fixkosten das Nettoeinkommen übersteigt
   - Hellgrüne Hervorhebung der Spalte "Kaufpreis netto"
   - Mouseover-Funktion: Anzeigen der Berechnungsformeln als Tooltip bei Hover über die Spaltentitel
+  - Ab Version 1.3.0: Berechnungen berücksichtigen nun drei separate Nettoeinkommen pro Szenario-Block.
 
 - **Stylesheet (`styles.css`):**
   - Einheitliches Layout für Eingabemaske und Ergebnis-Tabelle
