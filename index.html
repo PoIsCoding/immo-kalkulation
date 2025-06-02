@@ -19,24 +19,21 @@
 
     <!-- Eingabensektion -->
     <section id="inputs">
-      <h2>Eingaben</h2>
+      <h2>Eingaben (Es müssen nicht nicht alle Szenarien ausgefüllt werden)</h2>
 
-      <!-- Nettoeinkommen -->
-      <div class="block">
-        <div class="form-row">
-          <label for="net-income">Nettoeinkommen (€)</label>
-          <input
-            type="text"
-            id="net-income"
-            name="netIncome"
-            placeholder="z.B. 1.234,56"
-          />
-        </div>
-      </div>
 
       <!-- Block 1 -->
       <div class="block">
-        <h3>Block 1</h3>
+        <h3>Szenario 1 (Vergleich 1)</h3>
+        <div class="form-row">
+          <label for="net-income1">Nettoeinkommen 1 (€)</label>
+          <input
+            type="text"
+            id="net-income1"
+            name="netIncome1"
+            placeholder="z.B. 1234 oder 1.234,56"
+          />
+        </div>
         <div class="form-row">
           <label for="max-rate1">Max. Rate 1 (40%)</label>
           <input
@@ -77,15 +74,24 @@
             id="interest-rate1"
             name="interestRate1"
             step="0.01"
-            placeholder="z.B. 3,00"
-            value="3"
+            placeholder="z.B. 3 oder 3,45"
+            value=""
           />
         </div>
       </div>
 
       <!-- Block 2 -->
       <div class="block">
-        <h3>Block 2</h3>
+        <h3>Szenario 2 (Vergleich 2)</h3>
+        <div class="form-row">
+          <label for="net-income2">Nettoeinkommen 2 (€)</label>
+          <input
+            type="text"
+            id="net-income2"
+            name="netIncome2"
+            placeholder="z.B. 1234 oder 1.234,56"
+          />
+        </div>
         <div class="form-row">
           <label for="max-rate2">Max. Rate 2 (40%)</label>
           <input
@@ -126,15 +132,24 @@
             id="interest-rate2"
             name="interestRate2"
             step="0.01"
-            placeholder="z.B. 4,00"
-            value="4"
+            placeholder="z.B. 3 oder 3,45"
+            value=""
           />
         </div>
       </div>
 
       <!-- Block 3 -->
       <div class="block">
-        <h3>Block 3</h3>
+        <h3>Szenario 3 (Vergleich 3)</h3>
+        <div class="form-row">
+          <label for="net-income3">Nettoeinkommen 3 (€)</label>
+          <input
+            type="text"
+            id="net-income3"
+            name="netIncome3"
+            placeholder="z.B. 1234 oder 1.234,56"
+          />
+        </div>
         <div class="form-row">
           <label for="max-rate3">Max. Rate 3 (40%)</label>
           <input
@@ -175,8 +190,8 @@
             id="interest-rate3"
             name="interestRate3"
             step="0.01"
-            placeholder="z.B. 5,00"
-            value="5"
+            placeholder="z.B. 3 oder 3,45"
+            value=""
           />
         </div>
       </div>
@@ -190,7 +205,7 @@
             type="number"
             id="monthly-fixed-costs"
             name="monthlyFixedCosts"
-            placeholder="z.B. 1.234,56"
+            placeholder="z.B. 1234 oder 1.234,56"
             step="0.01"
           />
         </div>
@@ -272,29 +287,27 @@
   <!-- Externe Skripte -->
   <script src="js/berechnungen.js"></script>
   <script>
-    // Hilfsfunktion: Eingabe für Nettoeinkommen filtern
-    function filterNetInput() {
-      const input = document.getElementById('net-income');
-      // Nur Ziffern, Punkt und Komma zulassen
+    // Hilfsfunktion: Eingabe für Nettoeinkommen filtern (für alle 3 Felder)
+    function filterNetInput(idx) {
+      const input = document.getElementById('net-income' + idx);
       input.value = input.value.replace(/[^\d.,]/g, '');
     }
 
-    // Hilfsfunktion: Nettoeinkommen formatieren (Dezimal- und Tausendertrennzeichen)
-    function formatNetIncome() {
-      const input = document.getElementById('net-income');
+    // Hilfsfunktion: Nettoeinkommen formatieren (Dezimal- und Tausendertrennzeichen) (für alle 3 Felder)
+    function formatNetIncome(idx) {
+      const input = document.getElementById('net-income' + idx);
       let raw = input.value.replace(/\./g, '').replace(/,/g, '.');
       let num = parseFloat(raw) || 0;
-      // Format mit Tausenderpunkt und Komma
       const parts = num.toFixed(2).split('.');
       const integerPart = parts[0];
       const decimalPart = parts[1];
       input.value = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + decimalPart;
     }
 
-    // Funktion, um Slider- und Absolutwerte zu aktualisieren
-    function updateSliderValue(sliderId, valueSpanId, absSpanId) {
+    // Funktion, um Slider- und Absolutwerte zu aktualisieren (block-spezifisch)
+    function updateSliderValue(sliderId, valueSpanId, absSpanId, netIncomeId) {
       const slider = document.getElementById(sliderId);
-      const raw = document.getElementById('net-income').value.replace(/\./g, '').replace(/,/g, '.');
+      const raw = document.getElementById(netIncomeId).value.replace(/\./g, '').replace(/,/g, '.');
       const net = parseFloat(raw) || 0;
       document.getElementById(valueSpanId).textContent = slider.value;
       const abs = (net * slider.value / 100).toFixed(2);
@@ -304,26 +317,27 @@
 
     // Register Slider-Events beim Laden
     document.addEventListener('DOMContentLoaded', function () {
-      // Nettoeinkommen-Events
-      const netIncomeInput = document.getElementById('net-income');
-      netIncomeInput.addEventListener('input', function () {
-        filterNetInput();
-        updateValues();
-        // Update all max-rate sliders' absolute value
-        [1, 2, 3].forEach(i => {
-          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`);
+      // Nettoeinkommen-Events für alle 3 Felder
+      [1, 2, 3].forEach(i => {
+        const netIncomeInput = document.getElementById('net-income' + i);
+        netIncomeInput.addEventListener('input', function () {
+          filterNetInput(i);
+          updateValues();
+          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`, `net-income${i}`);
+        });
+        netIncomeInput.addEventListener('blur', function () {
+          formatNetIncome(i);
         });
       });
-      netIncomeInput.addEventListener('blur', formatNetIncome);
 
-      // Max-Rate-Slider
+      // Max-Rate-Slider (je Block auf das passende Nettoeinkommen)
       [1, 2, 3].forEach(i => {
         const slider = document.getElementById(`max-rate${i}`);
         slider.addEventListener('input', () => {
-          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`);
+          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`, `net-income${i}`);
         });
         // Initial update
-        updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`);
+        updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`, `net-income${i}`);
       });
 
       // Equity-Slider
@@ -348,7 +362,10 @@
     // Formulareinsendung: Weiterleitung zu ergebnisse.html
     function submitForm() {
       const params = new URLSearchParams();
-      params.set('netIncome', document.getElementById('net-income').value);
+      // Drei separate Nettoeinkommen eintragen
+      params.set('netIncome1', document.getElementById('net-income1').value);
+      params.set('netIncome2', document.getElementById('net-income2').value);
+      params.set('netIncome3', document.getElementById('net-income3').value);
       [1, 2, 3].forEach(i => {
         params.set(`maxRate${i}`, document.getElementById(`max-rate${i}`).value);
         params.set(`equity${i}`, document.getElementById(`equity-share${i}`).value);

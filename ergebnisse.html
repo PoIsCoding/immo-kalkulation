@@ -42,8 +42,13 @@
 
     function calculateResultsFromParams() {
       const params = new URLSearchParams(window.location.search);
-      const rawNet = params.get('netIncome')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-      const netIncome = parseFloat(rawNet) || 0;
+      // Drei separate Nettoeinkommen einlesen
+      const rawNet1 = params.get('netIncome1')?.replace(/\./g, '').replace(/,/g, '.') || '0';
+      const rawNet2 = params.get('netIncome2')?.replace(/\./g, '').replace(/,/g, '.') || '0';
+      const rawNet3 = params.get('netIncome3')?.replace(/\./g, '').replace(/,/g, '.') || '0';
+      const netIncome1 = parseFloat(rawNet1) || 0;
+      const netIncome2 = parseFloat(rawNet2) || 0;
+      const netIncome3 = parseFloat(rawNet3) || 0;
       // Parse monthly fixed costs from URL parameters
       const rawFix = params.get('fixedCosts')?.replace(/\./g, '').replace(/,/g, '.') || '0';
       const fixedCosts = parseFloat(rawFix) || 0;
@@ -103,7 +108,9 @@
            + '<th title="Totale Gesamtkosten = Gesamtbelastung gesamt (Laufzeit) + Kaufkosten Brutto" style="width: 170px; white-space: nowrap;">Totale Gesamtkosten</th>'
            + '</tr>';
 
-      blocks.forEach(blk => {
+      const incomes = [netIncome1, netIncome2, netIncome3];
+      blocks.forEach((blk, index) => {
+        const netIncome = incomes[index]; // Block-spezifisches Nettoeinkommen
         const R = netIncome * blk.maxRatePct / 100;
         const loan0 = calcLoan(R, blk.interestPct, terms[0]);
         const n0 = terms[0] * 12;

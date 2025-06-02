@@ -57,3 +57,10 @@
 ## [1.2.1] - 2025-06-01
 ### Hinzugefügt
 - Hinzufügen von Mouseover-Beschreibungen und erklärenden Tooltips zu mehreren Spalten in `index.html` und `ergebnisse.html`, um Berechnungsgrundlagen und Annahmen transparenter darzustellen.
+
+# [1.3.0] - 2025-06-02
+### Geändert
+- Nettoeinkommen-Felder pro Block eingefügt: `netIncome1`, `netIncome2`, `netIncome3` in `index.html`.
+- Anpassung von `submitForm()` in `index.html`, um drei separate Nettoeinkommen zu übergeben.
+- Änderungen in `ergebnisse.html`/`umschalten.js`, sodass pro Szenario-Block das jeweilige Nettoeinkommen verwendet wird.
+- Umebennung der Block-Bereiche in passendere Namen
