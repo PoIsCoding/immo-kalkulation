@@ -13,8 +13,8 @@ Dieses Wiki-Dokument beschreibt die Funktionsweise der Web-App **„Immo-Kalkula
    - **Zinssatz** (nominaler Jahreszins in %)
 2. Zusätzlich gibt es ein Feld für **monatliche Fixkosten** (€/Monat).
 3. Es werden bis zu **5 Laufzeiten** (z. B. 20 Jahre, 25 Jahre, 30 Jahre, 35 Jahre, 40 Jahre) global festgelegt.
-4. Beim Klick auf **„Berechnen“** werden alle Eingaben als URL-Parameter an `ergebnisse.html` übergeben.
-5. In `ergebnisse.html` liest JavaScript alle Parameter aus und berechnet für jedes Szenario und jede Laufzeit ein Set von Finanzkennzahlen.
+4. Beim Klick auf **„Berechnen“** werden alle Eingaben über `js/formHandler.js` in `sessionStorage` gespeichert und der Benutzer zu `ergebnisse.html` weitergeleitet (ohne URL-Parameter).
+5. In `ergebnisse.html` liest JavaScript die Eingaben aus `sessionStorage` aus und berechnet für jedes Szenario und jede Laufzeit ein Set von Finanzkennzahlen.
 6. Das Ergebnis wird in einer **scrollbaren Tabelle** dargestellt. Spalten und Zeilen enthalten folgende Berechnungen:
    - Annuitätenrechnung (Darlehenssumme & Gesamtzinsen)
    - Netto-Kaufpreis (abzüglich aller Kaufnebenkosten)
@@ -53,14 +53,18 @@ Dieses Wiki-Dokument beschreibt die Funktionsweise der Web-App **„Immo-Kalkula
 </div>
 ```
 
+**Datenfluss mit `js/formHandler.js` und `sessionStorage`**
+
+Beim Klick auf **„Berechnen“** werden alle Eingaben im Formular über das Skript `js/formHandler.js` gesammelt und als JSON-Objekt unter dem Schlüssel `calcData` im `sessionStorage` gespeichert. Anschließend wird der Benutzer zu `ergebnisse.html` weitergeleitet – es werden keine URL-Parameter verwendet. Die Datenübertragung erfolgt ausschließlich über den `sessionStorage`.
+
 ### 2.2. Ergebnis-Generierung (`ergebnisse.html`)
 
-Beim Laden von **`ergebnisse.html`** wird automatisch die Funktion **`renderResults()`** ausgeführt:
+Beim Laden von **`ergebnisse.html`** wird automatisch die Funktion **`renderResults(inputData)`** ausgeführt, die die Werte aus `sessionStorage` ausliest und an `calculateResultsFromData(inputData)` übergibt:
 
 ```js
-function renderResults() {
+function renderResults(inputData) {
   const container = document.getElementById('results-container');
-  container.innerHTML = calculateResultsFromParams();
+  container.innerHTML = calculateResultsFromData(inputData);
 
   // Klick-Listener für Header-Tooltips:
   const headers = container.querySelectorAll('th');
@@ -72,10 +76,20 @@ function renderResults() {
     });
   });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  const raw = sessionStorage.getItem('calcData');
+  if (!raw) {
+    document.getElementById('results-container').innerText = 'Keine Daten gefunden.';
+    return;
+  }
+  const inputData = JSON.parse(raw);
+  renderResults(inputData);
+});
 ```
 
-**renderResults()** liest den DOM-Container mit `id="results-container"` aus.
-Über **calculateResultsFromParams()** wird der komplette HTML-String der Ergebnis-Tabelle erzeugt und in den Container eingefügt.
+**renderResults(inputData)** liest den DOM-Container mit `id="results-container"` aus.
+Über **calculateResultsFromData(inputData)** wird der komplette HTML-String der Ergebnis-Tabelle erzeugt und in den Container eingefügt.
 Danach fügt eine Schleife auf allen `<th>-Zellen` einen Klick-Listener hinzu, der beim Klick auf den Spaltentitel das jeweilige data-info-Attribut als Popup anzeigt.
 
 ---
@@ -283,45 +297,29 @@ function calculateRowMetrics(netIncome, blk, termYears, fixedCosts) {
 
 ## 4. Ergebnis-Tabelle (`functions.js`)
 
-In **`functions.js`** baut die Funktion **`calculateResultsFromParams()`** die gesamte scrollbare HTML-Tabelle auf. Anschließend fügt **`renderResults()`** die Tabelle in den DOM ein und hängt Klick-Listener an jede Spaltenüberschrift, damit beim Klick ein Popup mit Formel und Erklärung erscheint.
+In **`functions.js`** baut die Funktion **`calculateResultsFromData(inputData)`** die gesamte scrollbare HTML-Tabelle auf. Anschließend fügt **`renderResults(inputData)`** die Tabelle in den DOM ein und hängt Klick-Listener an jede Spaltenüberschrift, damit beim Klick ein Popup mit Formel und Erklärung erscheint.
 
 ---
 
-### 4.1. `calculateResultsFromParams()`
+### 4.1. `calculateResultsFromData(inputData)`
 
-1. **URL-Parameter einlesen**
+1. **Eingabedaten aus sessionStorage**
    ```js
-   function calculateResultsFromParams() {
-     const params = new URLSearchParams(window.location.search);
-
-     // Nettoeinkommen (3 Blöcke)
-     const rawNet1 = params.get('netIncome1')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-     const rawNet2 = params.get('netIncome2')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-     const rawNet3 = params.get('netIncome3')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-     const netIncome1 = parseFloat(rawNet1) || 0;
-     const netIncome2 = parseFloat(rawNet2) || 0;
-     const netIncome3 = parseFloat(rawNet3) || 0;
-     const incomes = [netIncome1, netIncome2, netIncome3];
-
-     // Fixkosten
-     const rawFix = params.get('fixedCosts')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-     const fixedCosts = parseFloat(rawFix) || 0;
-
-     // Laufzeiten (term1 … term5)
-     const terms = [
-       parseInt(params.get('term1')) || 0,
-       parseInt(params.get('term2')) || 0,
-       parseInt(params.get('term3')) || 0,
-       parseInt(params.get('term4')) || 0,
-       parseInt(params.get('term5')) || 0
-     ];
-
-     // Blöcke (maxRate, equity, interest)
-     const blocks = [1, 2, 3].map(i => ({
-       maxRatePct: parseFloat(params.get('maxRate' + i)) || 0,
-       equityPct:   parseFloat(params.get('equity' + i))   || 0,
-       interestPct: parseFloat(params.get('interest' + i)) || 0
-     }));
+   function calculateResultsFromData(inputData) {
+     // inputData entspricht dem JSON-Objekt aus sessionStorage (Schlüssel: 'calcData')
+     // Beispielstruktur:
+     // {
+     //   netIncomes: [1234.56, 2345.67, 3456.78],
+     //   fixedCosts: 200,
+     //   terms: [20, 25, 30, 35, 40],
+     //   blocks: [
+     //     { maxRatePct: 30, equityPct: 20, interestPct: 3 },
+     //     { maxRatePct: 35, equityPct: 30, interestPct: 3.5 },
+     //     ...
+     //   ]
+     // }
+     // ... weitere Verarbeitung wie bisher ...
+   ```
 
 ---
 ### 4.2. Tabellenkopf (Header) mit title + data-info
@@ -421,11 +419,11 @@ Jeder <th>-Eintrag enthält:
 }
 ```
 ---
-### 4.2. renderResults()
+### 4.2. renderResults(inputData)
 ```js
-function renderResults() {
+function renderResults(inputData) {
   const container = document.getElementById('results-container');
-  container.innerHTML = calculateResultsFromParams();
+  container.innerHTML = calculateResultsFromData(inputData);
 
   // ↓ Klick-Listener für alle <th> hinzufügen ↓
   const headers = container.querySelectorAll('th');
@@ -464,6 +462,7 @@ html += `<tr${rowStyle}> … </tr>`;
   - Drei Vergleichsszenarien (Szenario 1–3) mit jeweils eigenem Nettoeinkommen, Maximal-Rate %, Eigenkapital % und Zinssatz %.
   - Fünf Laufzeiten (z. B. 20 Jahre, 25 Jahre, 30 Jahre, 35 Jahre, 40 Jahre).
   - Monatliche Fixkosten (€/Monat).
+  - **Alle Eingaben werden über `js/formHandler.js` im `sessionStorage` gespeichert und an `ergebnisse.html` übergeben.**
 
 - **Berechnung (berechnungen.js)**
   - `calcLoan(R, interestPct, termYears)` → Annuitätenformel zur Ermittlung der Darlehenssumme.
@@ -471,6 +470,13 @@ html += `<tr${rowStyle}> … </tr>`;
   - `calculateRowMetrics(netIncome, blk, termYears, fixedCosts)` → Kapselt sämtliche Teilrechnungen für ein Szenario und eine Laufzeit in einem Rückgabeobjekt.
 
 - **Ergebnis (functions.js & ergebnisse.html)**
-  - `calculateResultsFromParams()` baut die scrollbare HTML-Tabelle auf und formatiert alle Werte über `formatNumber(...)`.
+  - `calculateResultsFromData(inputData)` baut die scrollbare HTML-Tabelle auf und formatiert alle Werte über `formatNumber(...)`.
   - Jeder Spaltenkopf (`<th>`) erhält ein `data-info`-Attribut mit Formel und Erklärung.
-  - `renderResults()` fügt die Tabelle in den DOM ein und hängt Klick-Listener an jede `<th>`, sodass beim Klick das zugehörige `data-info`-Popup erscheint.
+  - `renderResults(inputData)` fügt die Tabelle in den DOM ein und hängt Klick-Listener an jede `<th>`, sodass beim Klick das zugehörige `data-info`-Popup erscheint.
+
+---
+
+<!--
+### PDF-Export
+Der PDF-Export ist derzeit nicht verfügbar.
+-->

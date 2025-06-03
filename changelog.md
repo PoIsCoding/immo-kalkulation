@@ -1,5 +1,6 @@
 # Changelog
 
+
 ## [1.3.2] – 2025-06-03
 
 ### Hinzugefügt
@@ -14,6 +15,11 @@
   - `updateSliderValue` nutzt `toLocaleString('de-DE')` für Tausender-Trennzeichen im Euro-Betrag.
   - Registrierung von Slider- und Nettoeinkommen-Input-Event-Listenern erfolgt unabhängig vom "Berechnen"-Button.
 - PDF-Generierung entfernt: CSV-Export ersetzt vorherige PDF-Funktionalität.
+
+## [1.3.3] – 2025-06-03
+
+### Geändert
+- CSV-Export-Funktion in `js/save.js` deaktiviert und Button "Als CSV speichern" in `ergebnisse.html` ausgeblendet, da die Funktion derzeit nicht nutzbar ist.
 
 ## [1.3.1] – 2025-06-03
 
