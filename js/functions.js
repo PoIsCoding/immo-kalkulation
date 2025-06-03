@@ -148,7 +148,7 @@ function calculateResultsFromParams() {
        + '<th title="" data-info="" class="col-sep" style="width: 150px;">Nebenkosten-<br>Anteil (%)</th>'
        + '<th title="" data-info="" style="width: 170px;">Betriebskosten gesamt<br>(Laufzeit)</th>'
        + '<th title="" data-info="" class="col-sep" style="width: 190px;">Gesamtbelastung gesamt<br>(Laufzeit)</th>'
-       + '<th title="" data-info="" style="width: 170px;">Totale Gesamtkosten</th>'
+       + '<th title="" data-info="" style="width: 170px;">Totale Gesamtkosten<br>gesamte Laufzeit</th>'
        + '</tr>';
   // Durchlaufe Blöcke ...
   blocks.forEach((blk, index) => {

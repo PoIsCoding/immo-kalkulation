@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ergebnisse - Potenzieller Immo-Kauf</title>
+  <link rel="icon" type="image/png" href="images/icon.png" />
   <link rel="stylesheet" href="styles.css">
   <style>
     /* Verhindert Zeilenumbrüche in den Tabellen-Kopfzeilen */
@@ -54,12 +55,13 @@
       <li><strong>Nebenkosten-Anteil (%):</strong> Der prozentuale Anteil der aufgelaufenen Nebenkosten am Kaufpreis netto.</li>
       <li><strong>Betriebskosten gesamt (Laufzeit):</strong> Gesamte Betriebskosten über die Laufzeit des Darlehens.</li>
       <li><strong>Gesamtbelastung gesamt (Laufzeit):</strong> Die gesamte Belastung über die Laufzeit des Darlehens.</li>
-      <li><strong>Totale Gesamtkosten:</strong> Die gesamten Kosten inklusive aller Belastungen und Kaufkosten.</li>
+      <li><strong>Totale Gesamtkosten:</strong> Die gesamten Kosten inklusive aller Belastungen und Kaufkosten, entstanden über die gesamte Laufzeit, ohne eigenes monatliches Budget.</li>
     </ul>
   </div>
   <div class="container">
     <div class="block submit-block">
       <button type="button" onclick="window.history.back()">Zurück</button>
+      <!-- <button type="button" id="download-csv">Als CSV speichern</button> -->
     </div>
   </div>
   <script src="js/berechnungen.js"></script>
@@ -67,6 +69,8 @@
   <script>
     document.addEventListener('DOMContentLoaded', renderResults);
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script src="js/save.js"></script>
 
   <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; color: #666; font-size: 0.9em;">
       <p>Autor: ©Poramet "PoIsCoding" Bahnschulte - v1.3.x</p>
