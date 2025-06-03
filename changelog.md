@@ -1,7 +1,7 @@
 # Changelog
 
 
-## [1.3.2] – 2025-06-03
+## [1.3.4] – 2025-06-03
 
 ### Hinzugefügt
 - Datei `js/formHandler.js` implementiert, um Formular-Daten via `sessionStorage` zu speichern und Weiterleitung zu `ergebnisse.html` zu übernehmen.
