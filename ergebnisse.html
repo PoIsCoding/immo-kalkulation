@@ -21,231 +21,11 @@
     <p>Hier sind die Ergebnisse basierend auf den eingegebenen Parametern:</p>
     <!-- <p>Hinweise: ± 10 % Varianz, keine Gewährleistung für die Angaben und sind als Richtwerte zu verstehen.</p> -->
     <div id="results-container"></div>
-    <div class="block submit-block">
-      <button type="button" onclick="window.history.back()">Zurück</button>
-    </div>
   </div>
-  <script>
-    // Kopiere hier die formatNumber und calculateResults-Funktion, angepasst auf URL-Parameter
-    function formatNumber(value) {
-      const parts = Number(value).toFixed(2).split('.');
-      let intPart = parts[0];
-      const decPart = parts[1];
-      let resultInt = '';
-      while (intPart.length > 3) {
-        resultInt = '.' + intPart.slice(-3) + resultInt;
-        intPart = intPart.slice(0, -3);
-      }
-      resultInt = intPart + resultInt;
-      return resultInt + ',' + decPart;
-    }
-
-    function calculateResultsFromParams() {
-      const params = new URLSearchParams(window.location.search);
-      // Drei separate Nettoeinkommen einlesen
-      const rawNet1 = params.get('netIncome1')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-      const rawNet2 = params.get('netIncome2')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-      const rawNet3 = params.get('netIncome3')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-      const netIncome1 = parseFloat(rawNet1) || 0;
-      const netIncome2 = parseFloat(rawNet2) || 0;
-      const netIncome3 = parseFloat(rawNet3) || 0;
-      // Parse monthly fixed costs from URL parameters
-      const rawFix = params.get('fixedCosts')?.replace(/\./g, '').replace(/,/g, '.') || '0';
-      const fixedCosts = parseFloat(rawFix) || 0;
-
-      const terms = [
-        parseInt(params.get('term1')) || 0,
-        parseInt(params.get('term2')) || 0,
-        parseInt(params.get('term3')) || 0,
-        parseInt(params.get('term4')) || 0,
-        parseInt(params.get('term5')) || 0
-      ];
-
-      const blocks = [1,2,3].map(i => ({
-        title: 'Block ' + i,
-        maxRatePct: parseFloat(params.get('maxRate' + i)) || 0,
-        equityPct: parseFloat(params.get('equity' + i)) || 0,
-        interestPct: parseFloat(params.get('interest' + i)) || 0
-      }));
-
-      function calcLoan(R, annualPct, years) {
-        const i = annualPct / 100 / 12;
-        const n = years * 12;
-        if (i === 0 || n === 0) return 0;
-        return R * (1 - Math.pow(1 + i, -n)) / i;
-      }
-
-      const kbRateSum = 0.035 + 0.011 + 0.012 + 0.0432 + 0.015 + 0.01; // =0.1262
-      let html = '<table border="1" cellpadding="5" cellspacing="0" style="width: 100%; text-align: right;">';
-      html += '<tr>'
-           + '<th title="Angegebene Laufzeit in Jahren" style="text-align: left; width: 100px; white-space: nowrap;">Laufzeit in Jahren</th>'
-           + '<th title="Nominaler Jahreszinssatz in Prozent" style="width: 80px; white-space: nowrap;">Zinssatz</th>'
-           + '<th title="Monatliche Rate = Nettoeinkommen × (Max. Rate % ÷ 100)" class="col-sep" style="width: 120px; white-space: nowrap;">Monatliche Rate</th>'
-           + '<th title="Darlehenssumme = R × (1 – (1 + i)^(-n)) ÷ i (Annuitätenformel)" style="width: 150px; white-space: nowrap;">Darlehenssumme</th>'
-           + '<th title="Gesamtzinsen = Monatsrate × Anzahl Monate – Darlehenssumme" style="width: 150px; white-space: nowrap;">Gesamtzinsen</th>'
-           + '<th title="Zinsanteil = Gesamtzinsen ÷ Gesamtbetrag × 100%" style="width: 120px; white-space: nowrap;">Zinsanteil</th>'
-           + '<th title="Gesamtzahlung an Bank = Darlehenssumme + Gesamtzinsen" class="col-sep" style="width: 150px; white-space: nowrap;">Rückzahlung an Bank</th>'
-           + '<th class="col-kaufpreis-netto" title="Kaufpreis netto = Darlehenssumme – Gesamte Kaufnebenkosten + Eigenkapital" style="width: 150px; white-space: nowrap;">Kaufpreis netto</th>'
-           + '<th title="Eigenkapitalanteil in Prozent" style="width: 100px; white-space: nowrap;">Eigenanteil</th>'
-           + '<th title="Eigenkapital in Euro = Kaufpreis × Eigenkapitalanteil" class="col-sep" style="width: 120px; white-space: nowrap;">Eigenanteil (€)</th>'
-           + '<th title="Grunderwerbssteuer = Kaufpreis × 3,5%" style="width: 120px; white-space: nowrap;">Grunderwerbssteuer</th>'
-           + '<th title="Grundbucheintragung = Kaufpreis × 1,1%" style="width: 120px; white-space: nowrap;">Grundbucheintragung</th>'
-           + '<th title="Kredit-/Hypothekeneintragung = Kaufpreis × 1,2%" style="width: 150px; white-space: nowrap;">Kredit-/Hypothekeneintragung</th>'
-           + '<th title="Maklerkosten = Kaufpreis × 3,6%" style="width: 120px; white-space: nowrap;">Maklerkosten</th>'
-           + '<th title="Notar-/Rechtsanwaltskosten inkl. 20% MwSt. = Kaufpreis × 1,5% × 1,20" style="width: 180px; white-space: nowrap;">Notar-/Rechtsanwalt</th>'
-           + '<th title="Sonstige Kosten = Kaufpreis × 1,0% (Bearbeitungsgebühr für Kredit, diverse Gebühren, Versicherungen)" style="width: 150px; white-space: nowrap;">Sonstige Kosten</th>'
-           + '<th title="Gesamte Kaufnebenkosten = Summe aller Nebenkosten" style="width: 150px; white-space: nowrap;">Ges. Kaufnebenkosten</th>'
-           + '<th title="Kaufnebenkosten-Anteil = Gesamte Kaufnebenkosten ÷ Kaufpreis × 100%" class="col-sep" style="width: 150px; white-space: nowrap;">KNK-Anteil %</th>'
-           + '<th title="Kaufkosten brutto = Eigenkapital + Darlehenssumme" class="col-sep" style="width: 150px; white-space: nowrap;">Kaufkosten Brutto</th>'
-           + '<th title="Betriebskosten (monatl.) = Kaufpreis × 2,3% ÷ 12 (Strom 0,5%, Wasser 0,2%, Müllabfuhr 0,1%, Versicherung 0,5%, Instandhaltung 1% p.a.)" style="width: 170px; white-space: nowrap;">Betriebskosten (monatl.)</th>'
-           + '<th title="Monatliche Gesamtbelastung = Monatliche Rate + Betriebskosten" style="width: 150px; white-space: nowrap;">Gesamtbelastung (monatl.)</th>'
-           + '<th title="Belastung-Anteil = Gesamtbelastung (monatl.) ÷ Nettoeinkommen × 100%" style="width: 150px; white-space: nowrap;">Belastung-Anteil (%)</th>'
-           + '<th title="Monatliche Gesamtbelastung inkl. Fixkosten = Gesamtbelastung (monatl.) + Fixkosten" style="width: 180px; white-space: nowrap;">Gesamtbelastung inkl. Fixkosten (monatl.)</th>'
-           + '<th title="Aufgelaufene Nebenkosten = Gesamtzinsen + Ges. Kaufnebenkosten" style="width: 170px; white-space: nowrap;">Aufgelaufene Nebenkosten</th>'
-           + '<th title="Nebenkosten-Anteil = Aufgelaufene Nebenkosten ÷ Kaufpreis netto × 100%" class="col-sep" style="width: 150px; white-space: nowrap;">Nebenkosten-Anteil (%)</th>'
-           + '<th title="Betriebskosten gesamt über Laufzeit = Betriebskosten (monatl.) × Laufzeit in Monaten" style="width: 170px; white-space: nowrap;">Betriebskosten gesamt (Laufzeit)</th>'
-           + '<th title="Monatliche Gesamtbelastung über Laufzeit = Gesamtbelastung (monatl.) × Laufzeit in Monaten" class="col-sep" style="width: 190px; white-space: nowrap;">Gesamtbelastung gesamt (Laufzeit)</th>'
-           + '<th title="Totale Gesamtkosten = Gesamtbelastung gesamt (Laufzeit) + Kaufkosten Brutto" style="width: 170px; white-space: nowrap;">Totale Gesamtkosten</th>'
-           + '</tr>';
-
-      const incomes = [netIncome1, netIncome2, netIncome3];
-      blocks.forEach((blk, index) => {
-        const netIncome = incomes[index]; // Block-spezifisches Nettoeinkommen
-        const R = netIncome * blk.maxRatePct / 100;
-        const loan0 = calcLoan(R, blk.interestPct, terms[0]);
-        const n0 = terms[0] * 12;
-        const totalPaid0 = R * n0;
-        const interest0 = totalPaid0 - loan0;
-        const purchasePrice0 = blk.equityPct < 100 ? loan0 / (1 - blk.equityPct / 100) : 0;
-        const incidental0 = purchasePrice0 * kbRateSum;
-        const netPurchase0 = purchasePrice0 - incidental0;
-        const grunderwerb0 = purchasePrice0 * 0.035;
-        const grundbuch0 = purchasePrice0 * 0.011;
-        const hypothek0 = purchasePrice0 * 0.012;
-        const makler0 = purchasePrice0 * 0.036;
-        const notar0 = purchasePrice0 * 0.015 * 1.19;
-        const sonstige0 = purchasePrice0 * 0.01;
-        const gesamtNebenkosten0 = grunderwerb0 + grundbuch0 + hypothek0 + makler0 + notar0 + sonstige0;
-        const nebKostenPct0 = (purchasePrice0 > 0) ? (gesamtNebenkosten0 / purchasePrice0) * 100 : 0;
-        const equityAbs0 = purchasePrice0 * (blk.equityPct / 100);
-        // Calculate monthly operating and burden values before rendering row
-        const betriebskosten0 = purchasePrice0 * 0.023 / 12;
-        const gesamtBelastung0 = R + betriebskosten0;
-        const totalWithFix0 = gesamtBelastung0 + fixedCosts;
-        const aufgelaufeneNebenkosten0 = interest0 + gesamtNebenkosten0;
-        const nebKostenAnteil0 = netPurchase0 > 0 ? (aufgelaufeneNebenkosten0 / netPurchase0) * 100 : 0;
-        const betriebskostenGesamt0 = betriebskosten0 * terms[0] * 12;
-        const gesamtBelastungGesamt0 = gesamtBelastung0 * terms[0] * 12;
-        const totaleGesamtkosten0 = gesamtBelastungGesamt0 + (loan0 + equityAbs0);
-        const belastungPct0 = netIncome > 0 ? gesamtBelastung0 / netIncome * 100 : 0;
-        // Determine row background if total monthly burden exceeds net income
-        const rowStyle0 = (totalWithFix0 > netIncome) ? ' style="background-color: #fdd;"' : '';
-        html += `<tr${rowStyle0}>`;
-        html += `<td>${terms[0]} Jahre</td>`;
-        html += `<td rowspan="5">${formatNumber(blk.interestPct)} %</td>`;
-        html += `<td class="col-sep" rowspan="5">${formatNumber(R)} €</td>`;
-        html += `<td>${formatNumber(loan0)} €</td>`;
-        html += `<td>${formatNumber(interest0)} €</td>`;
-        html += `<td>${formatNumber((interest0 / (loan0 + interest0)) * 100)} %</td>`;
-        html += `<td class="col-sep">${formatNumber(loan0 + interest0)} €</td>`;
-        html += `<td class="col-kaufpreis-netto">${formatNumber(netPurchase0)} €</td>`;
-        html += `<td rowspan="5">${formatNumber(blk.equityPct)} %</td>`;
-        html += `<td class="col-sep" style="white-space: nowrap;">${formatNumber(equityAbs0)}&nbsp;€</td>`;
-        html += `<td>${formatNumber(grunderwerb0)} €</td>`;
-        html += `<td>${formatNumber(grundbuch0)} €</td>`;
-        html += `<td>${formatNumber(hypothek0)} €</td>`;
-        html += `<td>${formatNumber(makler0)} €</td>`;
-        html += `<td>${formatNumber(notar0)} €</td>`;
-        html += `<td>${formatNumber(sonstige0)} €</td>`;
-        html += `<td>${formatNumber(gesamtNebenkosten0)} €</td>`;
-        html += `<td class="col-sep">${formatNumber(nebKostenPct0)} %</td>`;
-        html += `<td class="col-sep">${formatNumber(loan0 + equityAbs0)} €</td>`;
-        html += `<td>${formatNumber(betriebskosten0)} €</td>`;
-        html += `<td>${formatNumber(gesamtBelastung0)} €</td>`;
-        html += `<td>${formatNumber(belastungPct0)} %</td>`;
-        html += `<td>${formatNumber(totalWithFix0)} €</td>`;
-        html += `<td>${formatNumber(aufgelaufeneNebenkosten0)} €</td>`;
-        html += `<td class="col-sep">${formatNumber(nebKostenAnteil0)} %</td>`;
-        html += `<td>${formatNumber(betriebskostenGesamt0)} €</td>`;
-        html += `<td class="col-sep">${formatNumber(gesamtBelastungGesamt0)} €</td>`;
-        html += `<td>${formatNumber(totaleGesamtkosten0)} €</td>`;
-        html += '</tr>';
-
-        for (let t = 1; t < terms.length; t++) {
-          const isLast = (t === terms.length - 1);
-          const loanAmt = calcLoan(R, blk.interestPct, terms[t]);
-          const nt = terms[t] * 12;
-          const totalPaidT = R * nt;
-          const interestT = totalPaidT - loanAmt;
-          const purchasePriceT = blk.equityPct < 100 ? loanAmt / (1 - blk.equityPct / 100) : 0;
-          const incidentalT = purchasePriceT * kbRateSum;
-          const netPurchaseT = purchasePriceT - incidentalT;
-          const grunderwerbT = purchasePriceT * 0.035;
-          const grundbuchT = purchasePriceT * 0.011;
-          const hypothekT = purchasePriceT * 0.012;
-          const maklerT = purchasePriceT * 0.036;
-          const notarT = purchasePriceT * 0.015 * 1.19;
-          const sonstigeT = purchasePriceT * 0.01;
-          const gesamtNebenkostenT = grunderwerbT + grundbuchT + hypothekT + maklerT + notarT + sonstigeT;
-          const nebKostenPctT = (purchasePriceT > 0) ? (gesamtNebenkostenT / purchasePriceT) * 100 : 0;
-          const equityAbsT = purchasePriceT * (blk.equityPct / 100);
-          // Calculate monthly operating and burden values before rendering row
-          const betriebskostenT = purchasePriceT * 0.023 / 12;
-          const gesamtBelastungT = R + betriebskostenT;
-          const totalWithFixT = gesamtBelastungT + fixedCosts;
-          const aufgelaufeneNebenkostenT = interestT + gesamtNebenkostenT;
-          const nebKostenAnteilT = netPurchaseT > 0 ? (aufgelaufeneNebenkostenT / netPurchaseT) * 100 : 0;
-          const betriebskostenGesamtT = betriebskostenT * terms[t] * 12;
-          const gesamtBelastungGesamtT = gesamtBelastungT * terms[t] * 12;
-          const totaleGesamtkostenT = gesamtBelastungGesamtT + (loanAmt + equityAbsT);
-          const belastungPctT = netIncome > 0 ? gesamtBelastungT / netIncome * 100 : 0;
-          // Determine row background if total monthly burden exceeds net income
-          const rowStyleT = (totalWithFixT > netIncome) ? ' style="background-color: #fdd;"' : '';
-          const trTag = isLast
-            ? `<tr class="block-separator"${rowStyleT}>`
-            : `<tr${rowStyleT}>`;
-          html += trTag;
-          html += `<td>${terms[t]} Jahre</td>`;
-          // Für Folgelaufzeiten keine Zinssatz- und Rate-Zellen, da rowspan im ersten Block-Zeile
-          html += `<td>${formatNumber(loanAmt)} €</td>`;
-          html += `<td>${formatNumber(interestT)} €</td>`;
-          html += `<td>${formatNumber((interestT / (loanAmt + interestT)) * 100)} %</td>`;
-          html += `<td class="col-sep">${formatNumber(loanAmt + interestT)} €</td>`;
-          html += `<td class="col-kaufpreis-netto">${formatNumber(netPurchaseT)} €</td>`;
-          html += `<td class="col-sep" style="white-space: nowrap;">${formatNumber(equityAbsT)}&nbsp;€</td>`;
-          html += `<td>${formatNumber(grunderwerbT)} €</td>`;
-          html += `<td>${formatNumber(grundbuchT)} €</td>`;
-          html += `<td>${formatNumber(hypothekT)} €</td>`;
-          html += `<td>${formatNumber(maklerT)} €</td>`;
-          html += `<td>${formatNumber(notarT)} €</td>`;
-          html += `<td>${formatNumber(sonstigeT)} €</td>`;
-          html += `<td>${formatNumber(gesamtNebenkostenT)} €</td>`;
-          html += `<td class="col-sep">${formatNumber(nebKostenPctT)} %</td>`;
-          html += `<td class="col-sep">${formatNumber(loanAmt + equityAbsT)} €</td>`;
-          html += `<td>${formatNumber(betriebskostenT)} €</td>`;
-          html += `<td>${formatNumber(gesamtBelastungT)} €</td>`;
-          html += `<td>${formatNumber(belastungPctT)} %</td>`;
-          html += `<td>${formatNumber(totalWithFixT)} €</td>`;
-          html += `<td>${formatNumber(aufgelaufeneNebenkostenT)} €</td>`;
-          html += `<td class="col-sep">${formatNumber(nebKostenAnteilT)} %</td>`;
-          html += `<td>${formatNumber(betriebskostenGesamtT)} €</td>`;
-          html += `<td class="col-sep">${formatNumber(gesamtBelastungGesamtT)} €</td>`;
-          html += `<td>${formatNumber(totaleGesamtkostenT)} €</td>`;
-          html += '</tr>';
-        }
-      });
-
-      html += '</table>';
-      return html;
-    }
-
-    document.getElementById('results-container').innerHTML = calculateResultsFromParams();
-  </script>
-
-<div class="container">
+  <div class="container">
     <h2>Ergebnisse im Detail</h2>
     <p>Die Tabelle zeigt die finanziellen Auswirkungen der verschiedenen Blöcke und Laufzeiten. Die Spalten sind wie folgt:</p>
-  <h3>Erklärung der Spalten</h3>
+    <h3>Erklärung der Spalten</h3>
     <ul>
       <li><strong>Laufzeit in Jahren:</strong> Die Dauer des Darlehens in Jahren.</li>
       <li><strong>Zinssatz:</strong> Der nominale Jahreszinssatz in Prozent.</li>
@@ -277,6 +57,16 @@
       <li><strong>Totale Gesamtkosten:</strong> Die gesamten Kosten inklusive aller Belastungen und Kaufkosten.</li>
     </ul>
   </div>
+  <div class="container">
+    <div class="block submit-block">
+      <button type="button" onclick="window.history.back()">Zurück</button>
+    </div>
+  </div>
+  <script src="js/berechnungen.js"></script>
+  <script src="js/functions.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', renderResults);
+  </script>
 
   <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #ccc; text-align: center; color: #666; font-size: 0.9em;">
       <p>Autor: ©Poramet "PoIsCoding" Bahnschulte - v1.3.x</p>

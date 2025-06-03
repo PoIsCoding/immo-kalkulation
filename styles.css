@@ -295,6 +295,11 @@ button[type="submit"]:hover {
   text-align: right;
 }
 
+/* Alle Tabellenköpfe zentriert */
+#results-container table th {
+  text-align: center;
+}
+
 /* Base cell borders */
 #results-container table th,
 #results-container table td {
@@ -305,6 +310,12 @@ button[type="submit"]:hover {
 /* Prevent line breaks in header text */
 #results-container table th {
   white-space: nowrap;
+}
+
+/* Neue Regel: In Zellen mit .wrap darf umgebrochen werden */
+#results-container table th.wrap {
+  white-space: normal;   /* jetzt ist Zeilenumbruch erlaubt */
+  padding: 5px;          /* optional: etwas mehr Padding */
 }
 
 /* Thick separator to the right of certain columns (col-sep class) */

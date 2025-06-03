@@ -78,6 +78,16 @@
             value=""
           />
         </div>
+        <div class="form-row">
+          <label for="fixed-costs1">Monatliche Fixkosten 1 (€)</label>
+          <input
+            type="number"
+            id="fixed-costs1"
+            name="fixedCosts1"
+            placeholder="z.B. 123 oder 123,45"
+            step="0.01"
+          />
+        </div>
       </div>
 
       <!-- Block 2 -->
@@ -134,6 +144,16 @@
             step="0.01"
             placeholder="z.B. 3 oder 3,45"
             value=""
+          />
+        </div>
+        <div class="form-row">
+          <label for="fixed-costs2">Monatliche Fixkosten 2 (€)</label>
+          <input
+            type="number"
+            id="fixed-costs2"
+            name="fixedCosts2"
+            placeholder="z.B. 123 oder 123,45"
+            step="0.01"
           />
         </div>
       </div>
@@ -194,21 +214,21 @@
             value=""
           />
         </div>
+        <div class="form-row">
+          <label for="fixed-costs3">Monatliche Fixkosten 3 (€)</label>
+          <input
+            type="number"
+            id="fixed-costs3"
+            name="fixedCosts3"
+            placeholder="z.B. 123 oder 123,45"
+            step="0.01"
+          />
+        </div>
       </div>
 
       <!-- Kosten & Laufzeiten -->
       <div class="block">
         <h3>Kosten &amp; Laufzeiten</h3>
-        <div class="form-row">
-          <label for="monthly-fixed-costs">Monatliche Fixkosten (€)</label>
-          <input
-            type="number"
-            id="monthly-fixed-costs"
-            name="monthlyFixedCosts"
-            placeholder="z.B. 1234 oder 1.234,56"
-            step="0.01"
-          />
-        </div>
         <div class="form-row">
           <label for="term1">Laufzeit 1 (Jahre)</label>
           <input
@@ -285,104 +305,6 @@
   </div>
 
   <!-- Externe Skripte -->
-  <script src="js/berechnungen.js"></script>
-  <script>
-    // Hilfsfunktion: Eingabe für Nettoeinkommen filtern (für alle 3 Felder)
-    function filterNetInput(idx) {
-      const input = document.getElementById('net-income' + idx);
-      input.value = input.value.replace(/[^\d.,]/g, '');
-    }
-
-    // Hilfsfunktion: Nettoeinkommen formatieren (Dezimal- und Tausendertrennzeichen) (für alle 3 Felder)
-    function formatNetIncome(idx) {
-      const input = document.getElementById('net-income' + idx);
-      let raw = input.value.replace(/\./g, '').replace(/,/g, '.');
-      let num = parseFloat(raw) || 0;
-      const parts = num.toFixed(2).split('.');
-      const integerPart = parts[0];
-      const decimalPart = parts[1];
-      input.value = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ',' + decimalPart;
-    }
-
-    // Funktion, um Slider- und Absolutwerte zu aktualisieren (block-spezifisch)
-    function updateSliderValue(sliderId, valueSpanId, absSpanId, netIncomeId) {
-      const slider = document.getElementById(sliderId);
-      const raw = document.getElementById(netIncomeId).value.replace(/\./g, '').replace(/,/g, '.');
-      const net = parseFloat(raw) || 0;
-      document.getElementById(valueSpanId).textContent = slider.value;
-      const abs = (net * slider.value / 100).toFixed(2);
-      document.getElementById(absSpanId).textContent = abs.replace('.', ',') + ' €';
-      updateValues();
-    }
-
-    // Register Slider-Events beim Laden
-    document.addEventListener('DOMContentLoaded', function () {
-      // Nettoeinkommen-Events für alle 3 Felder
-      [1, 2, 3].forEach(i => {
-        const netIncomeInput = document.getElementById('net-income' + i);
-        netIncomeInput.addEventListener('input', function () {
-          filterNetInput(i);
-          updateValues();
-          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`, `net-income${i}`);
-        });
-        netIncomeInput.addEventListener('blur', function () {
-          formatNetIncome(i);
-        });
-      });
-
-      // Max-Rate-Slider (je Block auf das passende Nettoeinkommen)
-      [1, 2, 3].forEach(i => {
-        const slider = document.getElementById(`max-rate${i}`);
-        slider.addEventListener('input', () => {
-          updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`, `net-income${i}`);
-        });
-        // Initial update
-        updateSliderValue(`max-rate${i}`, `max-rate${i}-value`, `max-rate${i}-abs`, `net-income${i}`);
-      });
-
-      // Equity-Slider
-      [1, 2, 3].forEach(i => {
-        const slider = document.getElementById(`equity-share${i}`);
-        const span = document.getElementById(`equity-share${i}-value`);
-        slider.addEventListener('input', () => {
-          span.textContent = slider.value;
-          updateValues();
-        });
-        // Initial value
-        span.textContent = slider.value;
-      });
-
-      // Buttons
-      document.getElementById('calculate-btn').addEventListener('click', submitForm);
-      document.getElementById('back-btn').addEventListener('click', () => {
-        window.history.back();
-      });
-    });
-
-    // Formulareinsendung: Weiterleitung zu ergebnisse.html
-    function submitForm() {
-      const params = new URLSearchParams();
-      // Drei separate Nettoeinkommen eintragen
-      params.set('netIncome1', document.getElementById('net-income1').value);
-      params.set('netIncome2', document.getElementById('net-income2').value);
-      params.set('netIncome3', document.getElementById('net-income3').value);
-      [1, 2, 3].forEach(i => {
-        params.set(`maxRate${i}`, document.getElementById(`max-rate${i}`).value);
-        params.set(`equity${i}`, document.getElementById(`equity-share${i}`).value);
-        params.set(`interest${i}`, document.getElementById(`interest-rate${i}`).value);
-      });
-      [1, 2, 3, 4, 5].forEach(i => {
-        params.set(`term${i}`, document.getElementById(`term${i}`).value);
-      });
-      params.set('fixedCosts', document.getElementById('monthly-fixed-costs').value);
-      window.location.href = 'ergebnisse.html?' + params.toString();
-    }
-
-    // Platzhalter-Funktion: Aktualisiert ggf. Interaktive Werte
-    function updateValues() {
-      // Diese Funktion kann erweitert werden, um 
-      // Live-Vorschauen oder Zwischenberechnungen durchzuführen.
-    }
-  </script>
+  <script src="js/functions.js"></script>
 </body>
 </html>
