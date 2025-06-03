@@ -2,6 +2,8 @@
 
 ## [1.3.1] – 2025-06-03
 
+- JavaScript-Struktur überarbeitet: Inhalte aus `umschalten.js` wurden entfernt und sinnvoll in `functions.js` und `berechnungen.js` aufgeteilt. `umschalten.js` existiert nicht mehr.
+
 ### Geändert
 - **Monatl. Fixkosten** in der Ergebnis-Tabelle pro Block-Gruppe in die erste Zeile verschoben und dort mit `rowspan="5"` zusammengefasst. Alle nachfolgenden Zeilen enthalten nun keine eigene Fixkosten-Zelle mehr.
 - Fehlende oder falsch platzierte `<td>`-Zellen für „Monatl. Fixkosten“ in den inneren Schleifen entfernt, sodass sich die Spalten ab „Gesamtbelastung inkl. Fixkosten“ nicht mehr verschieben.
@@ -12,6 +14,7 @@
   #results-container table th { text-align: center; }
   ```
 - „Zurück“-Button in `ergebnisse.html` in einen `.container`-Wrapper gelegt, um den weißen Bereich nicht mehr über die gesamte Breite anzuzeigen, sondern auf die Seitenbreite der Index-Seite zu begrenzen.
+- Diverse Formel- und Berechnungskorrekturen zur Sicherstellung einheitlicher Berechnungsgrundlagen (z. B. Bezug aller Nebenkosten auf Kaufpreis netto).
 
 ### Behoben
 - Syntaxfehler im Header-HTML (fehlende Anführungszeichen bei `style="width: 180px"`).
