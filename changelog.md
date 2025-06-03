@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.2] – 2025-06-03
+
+### Hinzugefügt
+- Datei `js/formHandler.js` implementiert, um Formular-Daten via `sessionStorage` zu speichern und Weiterleitung zu `ergebnisse.html` zu übernehmen.
+- Neuer CSV-Export in `js/save.js`: Button "Als CSV speichern" erstellt nun `ergebnisse.csv` mit Semikolon-Trennung.
+
+### Geändert
+- `ergebnisse.html` angepasst, um Eingabedaten aus `sessionStorage` mittels `calculateResultsFromData` zu verarbeiten (statt `calculateResultsFromParams`).
+- `js/functions.js`:
+  - Funktion `renderResults` erhält `inputData`-Parameter und nutzt `calculateResultsFromData`.
+  - Neue Funktion `calculateResultsFromData(data)` hinzugefügt, die Berechnungen basierend auf Daten aus `sessionStorage` ausführt.
+  - `updateSliderValue` nutzt `toLocaleString('de-DE')` für Tausender-Trennzeichen im Euro-Betrag.
+  - Registrierung von Slider- und Nettoeinkommen-Input-Event-Listenern erfolgt unabhängig vom "Berechnen"-Button.
+- PDF-Generierung entfernt: CSV-Export ersetzt vorherige PDF-Funktionalität.
+
 ## [1.3.1] – 2025-06-03
 
 - JavaScript-Struktur überarbeitet: Inhalte aus `umschalten.js` wurden entfernt und sinnvoll in `functions.js` und `berechnungen.js` aufgeteilt. `umschalten.js` existiert nicht mehr.

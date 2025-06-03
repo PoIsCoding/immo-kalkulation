@@ -67,7 +67,15 @@
   <script src="js/berechnungen.js"></script>
   <script src="js/functions.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', renderResults);
+    document.addEventListener('DOMContentLoaded', function() {
+      const raw = sessionStorage.getItem('calcData');
+      if (!raw) {
+        document.getElementById('results-container').innerText = 'Keine Daten gefunden.';
+        return;
+      }
+      const inputData = JSON.parse(raw);
+      renderResults(inputData);
+    });
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
   <script src="js/save.js"></script>
