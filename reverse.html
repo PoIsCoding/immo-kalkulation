@@ -129,26 +129,15 @@
             </div>
           </div>
 
-          <!-- Laufzeit -->
-          <div class="field-group">
-            <label class="field-label" for="rev-term1">Laufzeit (Jahre)</label>
-            <div class="input-wrapper">
-              <span class="input-icon">J</span>
-              <input type="number" id="rev-term1" name="revTerm1"
-                     step="1" min="5" max="50" value="30"
-                     class="field-input with-icon" />
-            </div>
-          </div>
-
           <!-- Rate-Anteil-Slider -->
           <div class="field-group">
             <label class="field-label" for="rate-pct1">
               Rate = <strong><span id="rate-pct1-value">40</span>%</strong> des Nettoeinkommens
             </label>
             <input type="range" id="rate-pct1" name="ratePct1"
-                   min="10" max="50" step="1" value="40"
+                   min="10" max="40" step="1" value="40"
                    class="range-slider range-slider--accent" data-index="1" />
-            <div class="range-labels"><span>10%</span><span>50%</span></div>
+            <div class="range-labels"><span>10%</span><span>40%</span></div>
           </div>
 
         </div><!-- /Szenario 1 -->
@@ -193,23 +182,13 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="rev-term2">Laufzeit (Jahre)</label>
-            <div class="input-wrapper">
-              <span class="input-icon">J</span>
-              <input type="number" id="rev-term2" name="revTerm2"
-                     step="1" min="5" max="50" value="30"
-                     class="field-input with-icon" />
-            </div>
-          </div>
-
-          <div class="field-group">
             <label class="field-label" for="rate-pct2">
               Rate = <strong><span id="rate-pct2-value">40</span>%</strong> des Nettoeinkommens
             </label>
             <input type="range" id="rate-pct2" name="ratePct2"
-                   min="10" max="50" step="1" value="40"
+                   min="10" max="40" step="1" value="40"
                    class="range-slider range-slider--accent" data-index="2" />
-            <div class="range-labels"><span>10%</span><span>50%</span></div>
+            <div class="range-labels"><span>10%</span><span>40%</span></div>
           </div>
 
         </div><!-- /Szenario 2 -->
@@ -254,28 +233,48 @@
           </div>
 
           <div class="field-group">
-            <label class="field-label" for="rev-term3">Laufzeit (Jahre)</label>
-            <div class="input-wrapper">
-              <span class="input-icon">J</span>
-              <input type="number" id="rev-term3" name="revTerm3"
-                     step="1" min="5" max="50" value="30"
-                     class="field-input with-icon" />
-            </div>
-          </div>
-
-          <div class="field-group">
             <label class="field-label" for="rate-pct3">
               Rate = <strong><span id="rate-pct3-value">40</span>%</strong> des Nettoeinkommens
             </label>
             <input type="range" id="rate-pct3" name="ratePct3"
-                   min="10" max="50" step="1" value="40"
+                   min="10" max="40" step="1" value="40"
                    class="range-slider range-slider--accent" data-index="3" />
-            <div class="range-labels"><span>10%</span><span>50%</span></div>
+            <div class="range-labels"><span>10%</span><span>40%</span></div>
           </div>
 
         </div><!-- /Szenario 3 -->
 
       </div><!-- /scenarios-grid -->
+
+      <!-- ===== LAUFZEITEN ===== -->
+      <div class="terms-section">
+        <div class="section-header">
+          <h2 class="section-title">Laufzeiten</h2>
+          <p class="section-sub">Bis zu 5 Laufzeiten können verglichen werden – für jede wird eine eigene Zeile berechnet.</p>
+        </div>
+        <div class="terms-grid">
+          <div class="term-item">
+            <label class="field-label" for="rev-term1">Laufzeit 1 (Jahre)</label>
+            <input type="number" id="rev-term1" name="revTerm1" value="20" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term2">Laufzeit 2 (Jahre)</label>
+            <input type="number" id="rev-term2" name="revTerm2" value="25" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term3">Laufzeit 3 (Jahre)</label>
+            <input type="number" id="rev-term3" name="revTerm3" value="30" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term4">Laufzeit 4 (Jahre)</label>
+            <input type="number" id="rev-term4" name="revTerm4" value="35" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term5">Laufzeit 5 (Jahre)</label>
+            <input type="number" id="rev-term5" name="revTerm5" value="40" min="5" max="50" class="field-input" />
+          </div>
+        </div>
+      </div>
 
       <!-- ===== CTA ===== -->
       <div class="cta-section">

@@ -56,10 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
       revInterest2: document.getElementById('rev-interest2')?.value || '0',
       revInterest3: document.getElementById('rev-interest3')?.value || '0',
 
-      // Laufzeit in Jahren (Zahlenfeld)
-      revTerm1: document.getElementById('rev-term1')?.value || '30',
-      revTerm2: document.getElementById('rev-term2')?.value || '30',
+      // Laufzeiten: 5 separate Felder (wie im Vorwärts-Rechner)
+      revTerm1: document.getElementById('rev-term1')?.value || '20',
+      revTerm2: document.getElementById('rev-term2')?.value || '25',
       revTerm3: document.getElementById('rev-term3')?.value || '30',
+      revTerm4: document.getElementById('rev-term4')?.value || '35',
+      revTerm5: document.getElementById('rev-term5')?.value || '40',
 
       // Rate-Anteil in % des Nettoeinkommens (Slider)
       ratePct1: document.getElementById('rate-pct1')?.value || '40',
@@ -122,6 +124,7 @@ function initEquitySlider(i) {
 
 /**
  * Initialisiert den Rate-Anteil-Slider für einen Block.
+ * Max. 40% – entspricht der Bankgrenze für die monatliche Rate.
  * Zeigt nur den Prozentwert an.
  * @param {number} i - Block-Index (1, 2, 3)
  */

@@ -149,8 +149,11 @@ function calcReverseMetrics(netPurchasePrice, equityPct, interestPct, termYears,
 // ============================================================
 
 /**
- * Liest Daten aus sessionStorage, berechnet alle Szenarien und
+ * Liest Daten aus sessionStorage, berechnet alle Szenarien × Laufzeiten und
  * rendert die Ergebnistabelle in #rev-results-container.
+ *
+ * Tabellenstruktur: Eine Zeile pro Szenario+Laufzeit-Kombination.
+ * Szenarien werden durch block-separator optisch getrennt.
  *
  * @param {object} data - Rohdaten aus sessionStorage
  */
@@ -163,74 +166,79 @@ function renderReverseResults(data) {
     return;
   }
 
-  // ── Eingabedaten parsen ──
+  // ── Szenarien parsen ──
   const scenarios = [1, 2, 3].map(function (i) {
-    // Kaufpreis: Punkte als Tausender entfernen, Komma → Punkt
     const rawPrice = (data['purchasePrice' + i] || '0')
       .replace(/\./g, '').replace(/,/g, '.');
-
     return {
+      index:           i,
       netPurchasePrice: parseFloat(rawPrice) || 0,
-      equityPct:        parseFloat(data['equityPct'    + i]) || 0,
-      interestPct:      parseFloat(data['revInterest'  + i]) || 0,
-      termYears:        parseInt(  data['revTerm'      + i]) || 0,
-      ratePct:          parseFloat(data['ratePct'      + i]) || 40
+      equityPct:        parseFloat(data['equityPct'   + i]) || 0,
+      interestPct:      parseFloat(data['revInterest' + i]) || 0,
+      ratePct:          parseFloat(data['ratePct'     + i]) || 40
     };
   });
 
-  Logger.debug('renderReverseResults(): Szenarien:', scenarios);
+  // ── Laufzeiten parsen (5 globale Felder, gültige herausfiltern) ──
+  const terms = [1, 2, 3, 4, 5]
+    .map(function (j) { return parseInt(data['revTerm' + j]) || 0; })
+    .filter(function (t) { return t >= 1; });
 
-  // Leere Szenarien herausfiltern
-  const validScenarios = scenarios.filter(function (s, idx) {
-    const valid = s.netPurchasePrice > 0 && s.interestPct > 0 && s.termYears > 0;
-    if (!valid) Logger.warn(`Szenario ${idx + 1} übersprungen (fehlende Werte)`);
+  Logger.debug('renderReverseResults(): Szenarien:', scenarios);
+  Logger.debug('renderReverseResults(): Laufzeiten (Jahre):', terms);
+
+  // ── Leere Szenarien herausfiltern ──
+  // Ein Szenario ist gültig, wenn Kaufpreis > 0 und Zinssatz > 0
+  const validScenarios = scenarios.filter(function (s) {
+    const valid = s.netPurchasePrice > 0 && s.interestPct > 0;
+    if (!valid) Logger.warn(`Szenario ${s.index} übersprungen (Kaufpreis oder Zinssatz fehlt)`);
     return valid;
   });
 
-  if (validScenarios.length === 0) {
-    Logger.warn('renderReverseResults(): Keine gültigen Szenarien vorhanden');
+  if (validScenarios.length === 0 || terms.length === 0) {
+    Logger.warn('renderReverseResults(): Keine gültigen Szenarien oder Laufzeiten');
     container.innerHTML = `
       <div class="empty-state">
-        <p>⚠️ Keine auswertbaren Szenarien gefunden.</p>
-        <p>Bitte gehe zurück und fülle mindestens ein Szenario vollständig aus
-           (Kaufpreis, Zinssatz und Laufzeit sind Pflicht).</p>
+        <p>⚠️ Keine auswertbaren Daten gefunden.</p>
+        <p>Bitte gehe zurück und fülle mindestens ein Szenario (Kaufpreis + Zinssatz) sowie eine Laufzeit aus.</p>
         <button type="button" onclick="window.history.back()" class="btn-primary" style="margin-top:16px;">← Zurück</button>
       </div>`;
     return;
   }
 
   // ── Tabellen-Header ──
+  // "Laufzeit" kommt jetzt als eigene Spalte nach "Szenario"
   const headers = [
-    { label: 'Szenario',                        title: 'Bezeichnung des Szenarios' },
-    { label: 'Kaufpreis netto',                 title: 'Eingegebener Kaufpreis ohne Nebenkosten', green: true },
-    { label: 'Eigenanteil (%)',                 title: 'Prozentualer Eigenanteil am Kaufpreis brutto' },
-    { label: 'Eigenanteil (€)',                 title: 'Absoluter Eigenkapitalbetrag in Euro' },
-    { label: 'Grunderwerbssteuer',              title: '3,5% des Kaufpreises netto' },
-    { label: 'Grundbucheintragung',             title: '1,1% des Kaufpreises netto' },
-    { label: 'Hypothekeneintragung',            title: '1,2% des Kaufpreises netto' },
-    { label: 'Maklerkosten',                    title: '3,6% des Kaufpreises netto' },
-    { label: 'Notar / Rechtsanwalt',            title: '1,5% × 1,20 inkl. MwSt' },
-    { label: 'Sonstige Kosten',                 title: '1,0% des Kaufpreises netto' },
-    { label: 'Ges. Kaufnebenkosten',            title: 'Summe aller Kaufnebenkosten' },
-    { label: 'KNK-Anteil (%)',                  title: 'Nebenkosten in % des Kaufpreises netto', sep: true },
-    { label: 'Kaufpreis brutto',                title: 'Kaufpreis netto + alle Kaufnebenkosten' },
-    { label: 'Darlehenssumme',                  title: 'Kaufpreis brutto abzüglich Eigenkapital' },
-    { label: 'Zinssatz (%)',                    title: 'Nominaler Jahreszinssatz' },
-    { label: 'Laufzeit (Jahre)',                title: 'Tilgungsdauer in Jahren' },
-    { label: 'Gesamtzinsen',                    title: 'Alle Zinsen über die gesamte Laufzeit' },
-    { label: 'Zinsanteil (%)',                  title: 'Zinsen in % der Gesamtrückzahlung' },
-    { label: 'Rückzahlung an Bank',             title: 'Darlehen + Gesamtzinsen', sep: true },
-    { label: '→ Monatliche Rate',               title: 'Berechnete monatliche Tilgungsrate (Annuitätenformel)', highlight: true },
-    { label: 'Rate-Anteil Einkommen (%)',        title: 'Die Rate soll X% des Nettoeinkommens ausmachen' },
-    { label: '→ Benötigtes Nettoeinkommen',     title: 'Das Nettoeinkommen das du mindestens benötigst', income: true, sep: true },
-    { label: 'Betriebskosten (mtl.)',           title: '2,3% p.a. ÷ 12 Monate' },
-    { label: 'Gesamtbelastung (mtl.)',          title: 'Monatliche Rate + Betriebskosten' },
-    { label: 'Belastungsquote (%)',             title: 'Gesamtbelastung ÷ benötigtes Einkommen × 100', sep: true },
-    { label: 'Aufgelaufene Nebenkosten',        title: 'Zinsen + Kaufnebenkosten' },
-    { label: 'Nebenkosten-Anteil (%)',          title: 'Aufgelaufene Nebenkosten ÷ Kaufpreis netto × 100' },
-    { label: 'Betriebskosten gesamt (Laufzeit)',title: 'Monatliche BK × Laufzeit in Monaten' },
-    { label: 'Gesamtbelastung (Laufzeit)',      title: 'Monatliche Gesamtbelastung × Laufzeit in Monaten', sep: true },
-    { label: 'Totale Gesamtkosten',             title: 'Alle Belastungen + Kaufpreis brutto über die gesamte Laufzeit' }
+    { label: 'Szenario',                         title: 'Bezeichnung des Szenarios' },
+    { label: 'Laufzeit',                          title: 'Gewählte Tilgungsdauer in Jahren' },
+    { label: 'Kaufpreis netto',                   title: 'Eingegebener Kaufpreis ohne Nebenkosten', green: true },
+    { label: 'Eigenanteil (%)',                   title: 'Prozentualer Eigenanteil am Kaufpreis brutto' },
+    { label: 'Eigenanteil (€)',                   title: 'Absoluter Eigenkapitalbetrag in Euro' },
+    { label: 'Grunderwerbssteuer',                title: '3,5% des Kaufpreises netto' },
+    { label: 'Grundbucheintragung',               title: '1,1% des Kaufpreises netto' },
+    { label: 'Hypothekeneintragung',              title: '1,2% des Kaufpreises netto' },
+    { label: 'Maklerkosten',                      title: '3,6% des Kaufpreises netto' },
+    { label: 'Notar / Rechtsanwalt',              title: '1,5% × 1,20 inkl. MwSt' },
+    { label: 'Sonstige Kosten',                   title: '1,0% des Kaufpreises netto' },
+    { label: 'Ges. Kaufnebenkosten',              title: 'Summe aller Kaufnebenkosten' },
+    { label: 'KNK-Anteil (%)',                    title: 'Nebenkosten in % des Kaufpreises netto', sep: true },
+    { label: 'Kaufpreis brutto',                  title: 'Kaufpreis netto + alle Kaufnebenkosten' },
+    { label: 'Darlehenssumme',                    title: 'Kaufpreis brutto abzüglich Eigenkapital' },
+    { label: 'Zinssatz (%)',                      title: 'Nominaler Jahreszinssatz' },
+    { label: 'Gesamtzinsen',                      title: 'Alle Zinsen über die gesamte Laufzeit' },
+    { label: 'Zinsanteil (%)',                    title: 'Zinsen in % der Gesamtrückzahlung' },
+    { label: 'Rückzahlung an Bank',               title: 'Darlehen + Gesamtzinsen', sep: true },
+    { label: '→ Monatliche Rate',                 title: 'Berechnete monatliche Tilgungsrate (Annuitätenformel)', highlight: true },
+    { label: 'Rate-Anteil Einkommen (%)',          title: 'Die Rate soll X% des Nettoeinkommens ausmachen' },
+    { label: '→ Benötigtes Nettoeinkommen',       title: 'Das Nettoeinkommen das du mindestens benötigst', income: true, sep: true },
+    { label: 'Betriebskosten (mtl.)',             title: '2,3% p.a. ÷ 12 Monate' },
+    { label: 'Gesamtbelastung (mtl.)',            title: 'Monatliche Rate + Betriebskosten' },
+    { label: 'Belastungsquote (%)',               title: 'Gesamtbelastung ÷ benötigtes Einkommen × 100', sep: true },
+    { label: 'Aufgelaufene Nebenkosten',          title: 'Zinsen + Kaufnebenkosten' },
+    { label: 'Nebenkosten-Anteil (%)',            title: 'Aufgelaufene Nebenkosten ÷ Kaufpreis netto × 100' },
+    { label: 'Betriebskosten gesamt (Laufzeit)',  title: 'Monatliche BK × Laufzeit in Monaten' },
+    { label: 'Gesamtbelastung (Laufzeit)',        title: 'Monatliche Gesamtbelastung × Laufzeit in Monaten', sep: true },
+    { label: 'Totale Gesamtkosten',              title: 'Alle Belastungen + Kaufpreis brutto' }
   ];
 
   // ── HTML aufbauen ──
@@ -249,55 +257,65 @@ function renderReverseResults(data) {
   });
   html += '</tr></thead><tbody>';
 
-  // Zeilen: eine pro gültigem Szenario
-  validScenarios.forEach(function (s, idx) {
-    const m         = calcReverseMetrics(
-      s.netPurchasePrice, s.equityPct, s.interestPct, s.termYears, s.ratePct
-    );
-    const scenLabel = `Szenario ${scenarios.indexOf(s) + 1}`;
+  // Zeilen: für jedes Szenario alle Laufzeiten, dann block-separator
+  validScenarios.forEach(function (s, scenIdx) {
+    const isLastScen = (scenIdx === validScenarios.length - 1);
 
-    // Zeilenstil: Kaufpreis-Zeilen immer normal, Einkommens-Spalte hervorgehoben
-    const isLast  = (idx === validScenarios.length - 1);
-    const rowCls  = isLast ? '' : 'block-separator';
+    terms.forEach(function (termYears, termIdx) {
+      const isLastTerm = (termIdx === terms.length - 1);
+      const m = calcReverseMetrics(
+        s.netPurchasePrice, s.equityPct, s.interestPct, termYears, s.ratePct
+      );
 
-    html += `<tr class="${rowCls}">`;
+      // block-separator nur nach der letzten Laufzeit eines Szenarios (außer beim letzten Szenario)
+      const rowCls = (!isLastScen && isLastTerm) ? 'block-separator' : '';
 
-    html += `<td style="text-align:center;font-weight:700;">${scenLabel}</td>`;
-    html += `<td class="col-kaufpreis-netto">${formatNumber(m.netPurchasePrice)} €</td>`;
-    html += `<td>${formatNumber(s.equityPct)} %</td>`;
-    html += `<td>${formatNumber(m.equityAbs)} €</td>`;
-    html += `<td>${formatNumber(m.grunderwerb)} €</td>`;
-    html += `<td>${formatNumber(m.grundbuch)} €</td>`;
-    html += `<td>${formatNumber(m.hypothek)} €</td>`;
-    html += `<td>${formatNumber(m.makler)} €</td>`;
-    html += `<td>${formatNumber(m.notar)} €</td>`;
-    html += `<td>${formatNumber(m.sonstige)} €</td>`;
-    html += `<td>${formatNumber(m.gesamtNebenkosten)} €</td>`;
-    html += `<td class="col-sep">${formatNumber(m.nebKostenPct)} %</td>`;
-    html += `<td>${formatNumber(m.purchasePriceBrutto)} €</td>`;
-    html += `<td>${formatNumber(m.loanAmt)} €</td>`;
-    html += `<td>${formatNumber(s.interestPct)} %</td>`;
-    html += `<td>${s.termYears} Jahre</td>`;
-    html += `<td>${formatNumber(m.interestAmt)} €</td>`;
-    html += `<td>${formatNumber(m.zinsanteilPct)} %</td>`;
-    html += `<td class="col-sep">${formatNumber(m.totalPaid)} €</td>`;
-    html += `<td class="col-rate">${formatNumber(m.monthlyRate)} €</td>`;
-    html += `<td>${formatNumber(s.ratePct)} %</td>`;
-    html += `<td class="col-income col-sep">${formatNumber(m.requiredNetIncome)} €</td>`;
-    html += `<td>${formatNumber(m.monthlyOps)} €</td>`;
-    html += `<td>${formatNumber(m.burdenMonthly)} €</td>`;
-    html += `<td class="col-sep">${formatNumber(m.burdenPct)} %</td>`;
-    html += `<td>${formatNumber(m.accumulatedCosts)} €</td>`;
-    html += `<td>${formatNumber(m.nebKostenAnteilPct)} %</td>`;
-    html += `<td>${formatNumber(m.totalOpsOverTerm)} €</td>`;
-    html += `<td class="col-sep">${formatNumber(m.totalBurdenOverTerm)} €</td>`;
-    html += `<td>${formatNumber(m.totalCosts)} €</td>`;
+      html += `<tr class="${rowCls}">`;
+      html += `<td style="text-align:center;font-weight:700;">Szenario ${s.index}</td>`;
+      html += `<td style="text-align:center;font-weight:600;">${termYears} J.</td>`;
+      html += `<td class="col-kaufpreis-netto">${formatNumber(m.netPurchasePrice)} €</td>`;
+      html += `<td>${formatNumber(s.equityPct)} %</td>`;
+      html += `<td>${formatNumber(m.equityAbs)} €</td>`;
+      html += `<td>${formatNumber(m.grunderwerb)} €</td>`;
+      html += `<td>${formatNumber(m.grundbuch)} €</td>`;
+      html += `<td>${formatNumber(m.hypothek)} €</td>`;
+      html += `<td>${formatNumber(m.makler)} €</td>`;
+      html += `<td>${formatNumber(m.notar)} €</td>`;
+      html += `<td>${formatNumber(m.sonstige)} €</td>`;
+      html += `<td>${formatNumber(m.gesamtNebenkosten)} €</td>`;
+      html += `<td class="col-sep">${formatNumber(m.nebKostenPct)} %</td>`;
+      html += `<td>${formatNumber(m.purchasePriceBrutto)} €</td>`;
+      html += `<td>${formatNumber(m.loanAmt)} €</td>`;
+      html += `<td>${formatNumber(s.interestPct)} %</td>`;
+      html += `<td>${formatNumber(m.interestAmt)} €</td>`;
+      html += `<td>${formatNumber(m.zinsanteilPct)} %</td>`;
+      html += `<td class="col-sep">${formatNumber(m.totalPaid)} €</td>`;
+      html += `<td class="col-rate">${formatNumber(m.monthlyRate)} €</td>`;
+      html += `<td>${formatNumber(s.ratePct)} %</td>`;
+      html += `<td class="col-income col-sep">${formatNumber(m.requiredNetIncome)} €</td>`;
+      html += `<td>${formatNumber(m.monthlyOps)} €</td>`;
+      html += `<td>${formatNumber(m.burdenMonthly)} €</td>`;
+      html += `<td class="col-sep">${formatNumber(m.burdenPct)} %</td>`;
+      html += `<td>${formatNumber(m.accumulatedCosts)} €</td>`;
+      html += `<td>${formatNumber(m.nebKostenAnteilPct)} %</td>`;
+      html += `<td>${formatNumber(m.totalOpsOverTerm)} €</td>`;
+      html += `<td class="col-sep">${formatNumber(m.totalBurdenOverTerm)} €</td>`;
+      html += `<td>${formatNumber(m.totalCosts)} €</td>`;
+      html += '</tr>';
 
-    html += '</tr>';
+      Logger.debug(
+        `Szenario ${s.index} / ${termYears}J: ` +
+        `Rate=${formatNumber(m.monthlyRate)} € → ` +
+        `Nettoeinkommen=${formatNumber(m.requiredNetIncome)} €`
+      );
+    });
   });
 
   html += '</tbody></table>';
-
   container.innerHTML = html;
-  Logger.info('renderReverseResults(): Tabelle erfolgreich gerendert ✓');
+
+  Logger.info(
+    `renderReverseResults() ✓ – ${validScenarios.length} Szenario(s) × ${terms.length} Laufzeit(en)` +
+    ` = ${validScenarios.length * terms.length} Zeilen gerendert`
+  );
 }
