@@ -1091,3 +1091,21 @@ a:hover { text-decoration: underline; }
   color: #003060;
   font-size: 0.92em;
 }
+
+/* ============================================================
+   22. rowspan-Zellen (Rückwärts-Ergebnisse)
+   ============================================================ */
+
+/* Verbundene Zellen leicht hervorheben */
+.results-table-wrap tbody td.rowspan-cell {
+  background-color: #f7f9f7 !important;
+  border-right: 2px solid var(--clr-border);
+}
+
+/* block-separator muss auch auf rowspan-Zellen wirken:
+   Da der border auf der letzten <tr> liegt, aber rowspan-Zellen
+   über mehrere Zeilen gehen, setzen wir den bottom-border
+   gezielt auf die Zellen der letzten Laufzeit-Zeile eines Szenarios. */
+.results-table-wrap tbody tr.block-separator td {
+  border-bottom: 3px solid var(--clr-primary) !important;
+}

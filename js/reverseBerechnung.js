@@ -257,43 +257,128 @@ function renderReverseResults(data) {
   });
   html += '</tr></thead><tbody>';
 
-  // Zeilen: für jedes Szenario alle Laufzeiten, dann block-separator
+  // ── Zeilen mit rowspan für idente Spalten ──
+  //
+  // Spalten die sich pro Szenario NICHT ändern → rowspan = Anzahl Laufzeiten,
+  // nur in der ersten Zeile des Szenarios rendern.
+  //
+  // Spalten die je Laufzeit variieren → in jeder Zeile einzeln.
+  //
+  // Idente Spalten (Index nach Header-Array, 0-basiert):
+  //   0  Szenario
+  //   2  Kaufpreis netto
+  //   3  Eigenanteil %
+  //   4  Eigenanteil €
+  //   5  Grunderwerbssteuer
+  //   6  Grundbucheintragung
+  //   7  Hypothekeneintragung
+  //   8  Maklerkosten
+  //   9  Notar
+  //   10 Sonstige Kosten
+  //   11 Ges. Kaufnebenkosten
+  //   12 KNK-Anteil %          (col-sep)
+  //   13 Kaufpreis brutto
+  //   14 Darlehenssumme
+  //   15 Zinssatz %
+  //   20 Rate-Anteil Einkommen %
+  //   22 Betriebskosten mtl.   (nach col-income)
+  //
+  // Variable Spalten (laufzeitabhängig):
+  //   1  Laufzeit
+  //   16 Gesamtzinsen
+  //   17 Zinsanteil %
+  //   18 Rückzahlung an Bank   (col-sep)
+  //   19 Monatliche Rate       (col-rate)
+  //   21 Benötigtes Nettoeinkommen (col-income col-sep)
+  //   23 Gesamtbelastung mtl.
+  //   24 Belastungsquote %     (col-sep)
+  //   25 Aufgelaufene Nebenkosten
+  //   26 Nebenkosten-Anteil %
+  //   27 Betriebskosten gesamt (Laufzeit)
+  //   28 Gesamtbelastung (Laufzeit) (col-sep)
+  //   29 Totale Gesamtkosten
+
   validScenarios.forEach(function (s, scenIdx) {
     const isLastScen = (scenIdx === validScenarios.length - 1);
+    const rs         = terms.length; // rowspan-Wert = Anzahl Laufzeiten
+
+    // Für alle Laufzeiten die Metriken vorab berechnen
+    // (erste Laufzeit liefert die identen Werte für rowspan-Zellen)
+    const allMetrics = terms.map(function (t) {
+      return calcReverseMetrics(s.netPurchasePrice, s.equityPct, s.interestPct, t, s.ratePct);
+    });
+    const m0 = allMetrics[0]; // Werte die sich nicht ändern kommen aus der ersten Berechnung
 
     terms.forEach(function (termYears, termIdx) {
-      const isLastTerm = (termIdx === terms.length - 1);
-      const m = calcReverseMetrics(
-        s.netPurchasePrice, s.equityPct, s.interestPct, termYears, s.ratePct
-      );
+      const isFirstTerm = (termIdx === 0);
+      const isLastTerm  = (termIdx === terms.length - 1);
+      const m           = allMetrics[termIdx];
 
-      // block-separator nur nach der letzten Laufzeit eines Szenarios (außer beim letzten Szenario)
+      // block-separator: dicke Trennlinie nach letzter Zeile eines Szenarios
+      // (außer beim letzten Szenario)
       const rowCls = (!isLastScen && isLastTerm) ? 'block-separator' : '';
 
       html += `<tr class="${rowCls}">`;
-      html += `<td style="text-align:center;font-weight:700;">Szenario ${s.index}</td>`;
-      html += `<td style="text-align:center;font-weight:600;">${termYears} J.</td>`;
-      html += `<td class="col-kaufpreis-netto">${formatNumber(m.netPurchasePrice)} €</td>`;
-      html += `<td>${formatNumber(s.equityPct)} %</td>`;
-      html += `<td>${formatNumber(m.equityAbs)} €</td>`;
-      html += `<td>${formatNumber(m.grunderwerb)} €</td>`;
-      html += `<td>${formatNumber(m.grundbuch)} €</td>`;
-      html += `<td>${formatNumber(m.hypothek)} €</td>`;
-      html += `<td>${formatNumber(m.makler)} €</td>`;
-      html += `<td>${formatNumber(m.notar)} €</td>`;
-      html += `<td>${formatNumber(m.sonstige)} €</td>`;
-      html += `<td>${formatNumber(m.gesamtNebenkosten)} €</td>`;
-      html += `<td class="col-sep">${formatNumber(m.nebKostenPct)} %</td>`;
-      html += `<td>${formatNumber(m.purchasePriceBrutto)} €</td>`;
-      html += `<td>${formatNumber(m.loanAmt)} €</td>`;
-      html += `<td>${formatNumber(s.interestPct)} %</td>`;
+
+      // ── Spalten mit rowspan (nur in erster Term-Zeile des Szenarios) ──
+      if (isFirstTerm) {
+        const rs_attr = rs > 1 ? ` rowspan="${rs}"` : '';
+
+        // Szenario
+        html += `<td${rs_attr} class="rowspan-cell" style="text-align:center;font-weight:700;vertical-align:middle;">Szenario ${s.index}</td>`;
+
+        // Variable Spalte: Laufzeit (kein rowspan – kommt direkt nach Szenario)
+        html += `<td style="text-align:center;font-weight:600;">${termYears} J.</td>`;
+
+        // Kaufpreis netto
+        html += `<td${rs_attr} class="col-kaufpreis-netto rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.netPurchasePrice)} €</td>`;
+        // Eigenanteil %
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(s.equityPct)} %</td>`;
+        // Eigenanteil €
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.equityAbs)} €</td>`;
+        // Kaufnebenkosten (6 Spalten)
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.grunderwerb)} €</td>`;
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.grundbuch)} €</td>`;
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.hypothek)} €</td>`;
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.makler)} €</td>`;
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.notar)} €</td>`;
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.sonstige)} €</td>`;
+        // Ges. Kaufnebenkosten
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.gesamtNebenkosten)} €</td>`;
+        // KNK-Anteil % (col-sep)
+        html += `<td${rs_attr} class="col-sep rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.nebKostenPct)} %</td>`;
+        // Kaufpreis brutto
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.purchasePriceBrutto)} €</td>`;
+        // Darlehenssumme
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.loanAmt)} €</td>`;
+        // Zinssatz %
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(s.interestPct)} %</td>`;
+
+      } else {
+        // Folgezeilen: nur Laufzeit (alle rowspan-Zellen werden vom Browser übersprungen)
+        html += `<td style="text-align:center;font-weight:600;">${termYears} J.</td>`;
+      }
+
+      // ── Laufzeitabhängige Spalten (in jeder Zeile) ──
       html += `<td>${formatNumber(m.interestAmt)} €</td>`;
       html += `<td>${formatNumber(m.zinsanteilPct)} %</td>`;
       html += `<td class="col-sep">${formatNumber(m.totalPaid)} €</td>`;
       html += `<td class="col-rate">${formatNumber(m.monthlyRate)} €</td>`;
-      html += `<td>${formatNumber(s.ratePct)} %</td>`;
+
+      // Rate-Anteil %: wieder ident pro Szenario → rowspan
+      if (isFirstTerm) {
+        const rs_attr = rs > 1 ? ` rowspan="${rs}"` : '';
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(s.ratePct)} %</td>`;
+      }
+
       html += `<td class="col-income col-sep">${formatNumber(m.requiredNetIncome)} €</td>`;
-      html += `<td>${formatNumber(m.monthlyOps)} €</td>`;
+
+      // Betriebskosten mtl.: ident pro Szenario → rowspan
+      if (isFirstTerm) {
+        const rs_attr = rs > 1 ? ` rowspan="${rs}"` : '';
+        html += `<td${rs_attr} class="rowspan-cell" style="vertical-align:middle;">${formatNumber(m0.monthlyOps)} €</td>`;
+      }
+
       html += `<td>${formatNumber(m.burdenMonthly)} €</td>`;
       html += `<td class="col-sep">${formatNumber(m.burdenPct)} %</td>`;
       html += `<td>${formatNumber(m.accumulatedCosts)} €</td>`;
@@ -301,6 +386,7 @@ function renderReverseResults(data) {
       html += `<td>${formatNumber(m.totalOpsOverTerm)} €</td>`;
       html += `<td class="col-sep">${formatNumber(m.totalBurdenOverTerm)} €</td>`;
       html += `<td>${formatNumber(m.totalCosts)} €</td>`;
+
       html += '</tr>';
 
       Logger.debug(
