@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ergebnisse | Immo-Rechner</title>
+  <link rel="icon" type="image/png" href="images/icon.png" />
+  <meta name="google-site-verification" content="OebpSrpdOOnlX1MwLxe4LWUMGTrTNdWLM9lb52rY8VM" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="images/icon.png" alt="Immo-Rechner Logo" class="logo-img" />
+        <div>
+          <span class="logo-title">Immo-Rechner</span>
+          <span class="logo-sub">Potenzieller Immobilienkauf</span>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <button type="button" onclick="window.history.back()" class="nav-btn-outline">← Zurück</button>
+        <button type="button" id="download-csv" class="nav-btn">⬇ CSV Export</button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== LEGENDE ===== -->
+  <div class="results-legend container">
+    <div class="legend-item legend-green">
+      <span class="legend-dot"></span>
+      <span><strong>Grün:</strong> Empfohlener Kaufpreis (Zielbereich)</span>
+    </div>
+    <div class="legend-item legend-red">
+      <span class="legend-dot"></span>
+      <span><strong>Rot:</strong> Monatliches Budget würde überschritten</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot legend-sep"></span>
+      <span><strong>Dicke Linie:</strong> Trennt die Szenarien voneinander</span>
+    </div>
+  </div>
+
+  <!-- ===== ERGEBNISTABELLE ===== -->
+  <main class="main-content">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Ergebnisse</h2>
+        <p class="section-sub">Fahre mit der Maus über einen Spaltentitel für weitere Infos.</p>
+      </div>
+
+      <!-- Scrollbarer Tabellencontainer -->
+      <div id="results-container" class="results-table-wrap">
+        <!-- Wird per JavaScript befüllt -->
+        <div class="loading-state">
+          <div class="spinner"></div>
+          <p>Berechne Ergebnisse …</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== SPALTENERKLÄRUNG ===== -->
+    <div class="container">
+      <div class="glossary-section">
+        <details class="glossary-details">
+          <summary class="glossary-summary">📖 Erklärung der Spalten</summary>
+          <div class="glossary-body">
+            <div class="glossary-grid">
+              <div class="glossary-group">
+                <h4>Darlehen</h4>
+                <dl>
+                  <dt>Laufzeit in Jahren</dt><dd>Die Dauer des Darlehens in Jahren.</dd>
+                  <dt>Zinssatz (%)</dt><dd>Der nominale Jahreszinssatz in Prozent.</dd>
+                  <dt>Monatliche Rate</dt><dd>Die monatliche Tilgungsrate.</dd>
+                  <dt>Darlehenssumme</dt><dd>Maximale Darlehenssumme nach Annuitätenformel.</dd>
+                  <dt>Gesamtzinsen</dt><dd>Summe aller Zinszahlungen über die Laufzeit.</dd>
+                  <dt>Zinsanteil (%)</dt><dd>Anteil der Zinsen an der Gesamtrückzahlung.</dd>
+                  <dt>Rückzahlung an Bank</dt><dd>Darlehen + Gesamtzinsen.</dd>
+                </dl>
+              </div>
+              <div class="glossary-group">
+                <h4>Kaufpreis & Eigenkapital</h4>
+                <dl>
+                  <dt>Kaufpreis netto</dt><dd>Kaufpreis ohne Nebenkosten – der Zielwert für deine Suche.</dd>
+                  <dt>Eigenanteil (%)</dt><dd>Prozentualer Eigenkapitalanteil am Kaufpreis.</dd>
+                  <dt>Eigenanteil (€)</dt><dd>Absoluter Eigenkapitalbetrag in Euro.</dd>
+                  <dt>Kaufkosten Brutto</dt><dd>Eigenkapital + Darlehenssumme.</dd>
+                </dl>
+              </div>
+              <div class="glossary-group">
+                <h4>Kaufnebenkosten (AT)</h4>
+                <dl>
+                  <dt>Grunderwerbssteuer</dt><dd>3,5% des Kaufpreises netto.</dd>
+                  <dt>Grundbucheintragung</dt><dd>1,1% des Kaufpreises netto.</dd>
+                  <dt>Hypothekeneintragung</dt><dd>1,2% des Kaufpreises netto.</dd>
+                  <dt>Maklerkosten</dt><dd>3,6% inkl. MwSt.</dd>
+                  <dt>Notar / Rechtsanwalt</dt><dd>1,5% × 1,20 inkl. MwSt.</dd>
+                  <dt>Sonstige Kosten</dt><dd>1,0% diverse Gebühren.</dd>
+                  <dt>Ges. Kaufnebenkosten</dt><dd>Summe aller Nebenkosten.</dd>
+                  <dt>KNK-Anteil (%)</dt><dd>Nebenkosten in % des Kaufpreises netto.</dd>
+                </dl>
+              </div>
+              <div class="glossary-group">
+                <h4>Monatliche Belastung</h4>
+                <dl>
+                  <dt>Betriebskosten (mtl.)</dt><dd>2,3% p.a. ÷ 12 Monate.</dd>
+                  <dt>Gesamtbelastung (mtl.)</dt><dd>Rate + Betriebskosten.</dd>
+                  <dt>Belastungsquote (%)</dt><dd>Gesamtbelastung ÷ Nettoeinkommen × 100.</dd>
+                  <dt>Gesamtbelastung inkl. Fixkosten</dt><dd>Rate + Betriebskosten + Fixkosten.</dd>
+                </dl>
+              </div>
+              <div class="glossary-group">
+                <h4>Laufzeit-Gesamtkosten</h4>
+                <dl>
+                  <dt>Aufgelaufene Nebenkosten</dt><dd>Zinsen + Kaufnebenkosten.</dd>
+                  <dt>Nebenkosten-Anteil (%)</dt><dd>Aufgelaufene Nebenkosten ÷ Kaufpreis netto × 100.</dd>
+                  <dt>Betriebskosten gesamt</dt><dd>Monatliche Betriebskosten × Laufzeit in Monaten.</dd>
+                  <dt>Gesamtbelastung gesamt</dt><dd>Monatliche Gesamtbelastung × Laufzeit in Monaten.</dd>
+                  <dt>Totale Gesamtkosten</dt><dd>Alle Belastungen + Kaufpreis über die gesamte Laufzeit.</dd>
+                </dl>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- ===== BUTTONS ===== -->
+    <div class="container cta-section" style="padding-top: 0;">
+      <button type="button" onclick="window.history.back()" class="btn-secondary">← Zurück</button>
+    </div>
+
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">©Poramet "PoIsCoding" Bahnschulte · v2.0.0</p>
+      <p class="footer-hint">Die angezeigten Zahlen können um ± 10 % abweichen und dienen nur zur groben Orientierung.</p>
+      <p class="footer-links">
+        <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
+        ·
+        <a href="https://github.com/PoIsCoding" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Skripte: berechnungen zuerst (Logger), dann helpers, dann save -->
+  <script src="js/berechnungen.js"></script>
+  <script src="js/functions.js"></script>
+  <script>
+    /**
+     * Initialisierung der Ergebnisseite.
+     * Liest Daten aus sessionStorage und rendert die Tabelle.
+     */
+    document.addEventListener('DOMContentLoaded', function () {
+      Logger.info('ergebnisse.html: DOMContentLoaded');
+
+      const container = document.getElementById('results-container');
+      const raw       = sessionStorage.getItem('calcData');
+
+      // Keine Daten → Hinweis anzeigen
+      if (!raw) {
+        Logger.warn('ergebnisse.html: Keine calcData in sessionStorage gefunden');
+        container.innerHTML = `
+          <div class="empty-state">
+            <p>⚠️ Keine Berechnungsdaten gefunden.</p>
+            <p>Bitte gehe zurück und fülle das Formular aus.</p>
+            <button type="button" onclick="window.history.back()" class="btn-primary" style="margin-top:16px;">← Zurück</button>
+          </div>`;
+        return;
+      }
+
+      // Daten parsen
+      let inputData;
+      try {
+        inputData = JSON.parse(raw);
+        Logger.info('ergebnisse.html: Daten aus sessionStorage geladen ✓');
+      } catch (err) {
+        Logger.error('ergebnisse.html: JSON-Parsefehler:', err);
+        container.innerHTML = '<p class="error-msg">Fehler beim Laden der Daten. Bitte gehe zurück.</p>';
+        return;
+      }
+
+      // Tabelle rendern
+      renderResults(inputData);
+    });
+  </script>
+  <script src="js/save.js"></script>
+
+</body>
+</html>
