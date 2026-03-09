@@ -905,3 +905,189 @@ a:hover { text-decoration: underline; }
 
   body { background: white; font-size: 11px; }
 }
+
+/* ============================================================
+   19. Mode-Auswahl (index.html & reverse.html)
+   ============================================================ */
+.mode-select-section {
+  background: var(--clr-surface);
+  border-bottom: 1px solid var(--clr-border);
+  padding-block: 20px;
+}
+
+.mode-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.mode-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--clr-bg);
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  text-decoration: none;
+  color: var(--clr-text);
+  transition: border-color .2s, box-shadow .2s, transform .15s;
+  position: relative;
+}
+
+.mode-card:hover {
+  border-color: var(--clr-primary);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  text-decoration: none;
+}
+
+/* Aktiver Modus (aktuelle Seite) */
+.mode-card--active {
+  border-color: var(--clr-primary);
+  background: var(--clr-primary-light);
+  box-shadow: 0 0 0 3px rgba(26,122,74,.12);
+}
+
+.mode-card__icon {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.mode-card__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.mode-card__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--clr-text);
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.mode-card__desc {
+  font-size: 0.82rem;
+  color: var(--clr-text-muted);
+  line-height: 1.4;
+}
+
+.mode-card__arrow {
+  font-size: 1.3rem;
+  color: var(--clr-primary);
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: transform .2s;
+}
+.mode-card:hover .mode-card__arrow {
+  transform: translateX(4px);
+}
+
+/* Aktiv-Badge oben rechts */
+.mode-card--active::after {
+  content: '✓ Aktiv';
+  position: absolute;
+  top: -1px;
+  right: 14px;
+  background: var(--clr-primary);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 0 0 6px 6px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+  .mode-cards { grid-template-columns: 1fr; }
+  .mode-card__desc { display: none; }
+}
+
+/* ============================================================
+   20. Rückwärts-Rechner – Varianten
+   ============================================================ */
+
+/* Hero-Variante für Rückwärts */
+.hero--reverse {
+  background: linear-gradient(135deg, #111827 0%, #1e2a3a 60%, #1a4a7a 100%);
+}
+
+.hero-badge--reverse {
+  background: rgba(26,122,218,.25);
+  border-color: rgba(26,122,218,.5);
+  color: #90c4f0;
+}
+
+/* Szenario-Card Rückwärts: blaue Akzente */
+.scenario-card--reverse {
+  border-color: #c3d9f0;
+}
+.scenario-card--reverse:hover {
+  border-color: #1a4a9a;
+}
+.scenario-card--reverse .card-header {
+  border-bottom-color: #dbeafe;
+}
+
+.card-number--reverse {
+  color: #1a4a9a;
+}
+
+/* Slider Akzentfarbe Blau für Rate-Anteil */
+.range-slider--accent {
+  background: linear-gradient(to right, #1a4a9a 0%, var(--clr-border-dark) 0%);
+}
+.range-slider--accent::-webkit-slider-thumb {
+  background: #1a4a9a;
+}
+.range-slider--accent::-webkit-slider-thumb:hover {
+  box-shadow: 0 2px 8px rgba(26,74,154,.4);
+}
+.range-slider--accent::-moz-range-thumb {
+  background: #1a4a9a;
+}
+
+/* Info-Card Rückwärts */
+.info-card--reverse {
+  border-left-color: #1a4a9a;
+}
+
+/* Button Rückwärts */
+.btn-primary--reverse {
+  background: #1a4a9a;
+  box-shadow: 0 4px 16px rgba(26,74,154,.35);
+}
+.btn-primary--reverse:hover {
+  background: #143a7a;
+  box-shadow: 0 6px 22px rgba(26,74,154,.45);
+}
+
+/* ============================================================
+   21. Tabellen-Sonderspalten (Rückwärts-Ergebnisse)
+   ============================================================ */
+
+/* Monatliche Rate – gelb hervorgehoben */
+.results-table-wrap thead th.col-rate {
+  background: #7a5c00 !important;
+  color: #fff3cd !important;
+}
+.results-table-wrap tbody td.col-rate {
+  background-color: #fff3cd !important;
+  font-weight: 700;
+  color: #5a4000;
+}
+
+/* Benötigtes Nettoeinkommen – blau hervorgehoben */
+.results-table-wrap thead th.col-income {
+  background: #004085 !important;
+  color: #cce5ff !important;
+}
+.results-table-wrap tbody td.col-income {
+  background-color: #cce5ff !important;
+  font-weight: 700;
+  color: #003060;
+  font-size: 0.92em;
+}

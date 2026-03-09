@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ergebnisse | Immo-Rechner</title>
+  <title>Ergebnisse – Benötigtes Einkommen | Immo-Rechner</title>
   <link rel="icon" type="image/png" href="images/icon.png" />
   <meta name="google-site-verification" content="OebpSrpdOOnlX1MwLxe4LWUMGTrTNdWLM9lb52rY8VM" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,6 +25,7 @@
       </div>
       <nav class="header-nav">
         <button type="button" onclick="window.history.back()" class="nav-btn-outline">← Zurück</button>
+        <!-- PDF-Button: aktuell hidden, kann später aktiviert werden -->
         <button type="button" id="download-pdf" class="nav-btn" hidden>⬇ PDF speichern</button>
       </nav>
     </div>
@@ -32,17 +33,17 @@
 
   <!-- ===== LEGENDE ===== -->
   <div class="results-legend container">
-    <div class="legend-item legend-green">
-      <span class="legend-dot"></span>
-      <span><strong>Grün:</strong> Empfohlener Kaufpreis (Zielbereich)</span>
-    </div>
-    <div class="legend-item legend-red">
-      <span class="legend-dot"></span>
-      <span><strong>Rot:</strong> Monatliches Budget würde überschritten</span>
+    <div class="legend-item">
+      <span class="legend-dot" style="background:#d4f7d4;border:1px solid #5cb85c;"></span>
+      <span><strong>Grün:</strong> Eingegebener Kaufpreis netto</span>
     </div>
     <div class="legend-item">
-      <span class="legend-dot legend-sep"></span>
-      <span><strong>Dicke Linie:</strong> Trennt die Szenarien voneinander</span>
+      <span class="legend-dot" style="background:#fff3cd;border:1px solid #e0a800;"></span>
+      <span><strong>Gelb:</strong> Monatliche Rate (Bankzahlung)</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-dot" style="background:#cce5ff;border:1px solid #004085;"></span>
+      <span><strong>Blau:</strong> Benötigtes Nettoeinkommen</span>
     </div>
   </div>
 
@@ -50,13 +51,12 @@
   <main class="main-content">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Ergebnisse</h2>
+        <h2 class="section-title">Ergebnisse – Was muss ich verdienen?</h2>
         <p class="section-sub">Fahre mit der Maus über einen Spaltentitel für weitere Infos.</p>
       </div>
 
       <!-- Scrollbarer Tabellencontainer -->
-      <div id="results-container" class="results-table-wrap">
-        <!-- Wird per JavaScript befüllt -->
+      <div id="rev-results-container" class="results-table-wrap">
         <div class="loading-state">
           <div class="spinner"></div>
           <p>Berechne Ergebnisse …</p>
@@ -72,24 +72,12 @@
           <div class="glossary-body">
             <div class="glossary-grid">
               <div class="glossary-group">
-                <h4>Darlehen</h4>
-                <dl>
-                  <dt>Laufzeit in Jahren</dt><dd>Die Dauer des Darlehens in Jahren.</dd>
-                  <dt>Zinssatz (%)</dt><dd>Der nominale Jahreszinssatz in Prozent.</dd>
-                  <dt>Monatliche Rate</dt><dd>Die monatliche Tilgungsrate.</dd>
-                  <dt>Darlehenssumme</dt><dd>Maximale Darlehenssumme nach Annuitätenformel.</dd>
-                  <dt>Gesamtzinsen</dt><dd>Summe aller Zinszahlungen über die Laufzeit.</dd>
-                  <dt>Zinsanteil (%)</dt><dd>Anteil der Zinsen an der Gesamtrückzahlung.</dd>
-                  <dt>Rückzahlung an Bank</dt><dd>Darlehen + Gesamtzinsen.</dd>
-                </dl>
-              </div>
-              <div class="glossary-group">
                 <h4>Kaufpreis & Eigenkapital</h4>
                 <dl>
-                  <dt>Kaufpreis netto</dt><dd>Kaufpreis ohne Nebenkosten – der Zielwert für deine Suche.</dd>
-                  <dt>Eigenanteil (%)</dt><dd>Prozentualer Eigenkapitalanteil am Kaufpreis.</dd>
+                  <dt>Kaufpreis netto</dt><dd>Eingegebener Kaufpreis ohne Nebenkosten.</dd>
+                  <dt>Eigenanteil (%)</dt><dd>Prozentualer Eigenanteil am Kaufpreis brutto.</dd>
                   <dt>Eigenanteil (€)</dt><dd>Absoluter Eigenkapitalbetrag in Euro.</dd>
-                  <dt>Kaufkosten Brutto</dt><dd>Eigenkapital + Darlehenssumme.</dd>
+                  <dt>Kaufpreis brutto</dt><dd>Kaufpreis netto + alle Kaufnebenkosten.</dd>
                 </dl>
               </div>
               <div class="glossary-group">
@@ -100,28 +88,38 @@
                   <dt>Hypothekeneintragung</dt><dd>1,2% des Kaufpreises netto.</dd>
                   <dt>Maklerkosten</dt><dd>3,6% inkl. MwSt.</dd>
                   <dt>Notar / Rechtsanwalt</dt><dd>1,5% × 1,20 inkl. MwSt.</dd>
-                  <dt>Sonstige Kosten</dt><dd>1,0% diverse Gebühren.</dd>
+                  <dt>Sonstige Kosten</dt><dd>1,0% des Kaufpreises netto.</dd>
                   <dt>Ges. Kaufnebenkosten</dt><dd>Summe aller Nebenkosten.</dd>
                   <dt>KNK-Anteil (%)</dt><dd>Nebenkosten in % des Kaufpreises netto.</dd>
                 </dl>
               </div>
               <div class="glossary-group">
-                <h4>Monatliche Belastung</h4>
+                <h4>Darlehen & Zinsen</h4>
                 <dl>
-                  <dt>Betriebskosten (mtl.)</dt><dd>2,3% p.a. ÷ 12 Monate.</dd>
-                  <dt>Gesamtbelastung (mtl.)</dt><dd>Rate + Betriebskosten.</dd>
-                  <dt>Belastungsquote (%)</dt><dd>Gesamtbelastung ÷ Nettoeinkommen × 100.</dd>
-                  <dt>Gesamtbelastung inkl. Fixkosten</dt><dd>Rate + Betriebskosten + Fixkosten.</dd>
+                  <dt>Darlehenssumme</dt><dd>Kaufpreis brutto abzüglich Eigenkapital.</dd>
+                  <dt>Zinssatz (%)</dt><dd>Nominaler Jahreszinssatz.</dd>
+                  <dt>Laufzeit (Jahre)</dt><dd>Tilgungsdauer in Jahren.</dd>
+                  <dt>Gesamtzinsen</dt><dd>Alle Zinszahlungen über die Laufzeit.</dd>
+                  <dt>Zinsanteil (%)</dt><dd>Anteil der Zinsen an der Gesamtrückzahlung.</dd>
+                  <dt>Rückzahlung an Bank</dt><dd>Darlehen + Gesamtzinsen.</dd>
                 </dl>
               </div>
               <div class="glossary-group">
-                <h4>Laufzeit-Gesamtkosten</h4>
+                <h4>Kernaussage</h4>
                 <dl>
+                  <dt>→ Monatliche Rate</dt><dd>Die monatliche Annuitätenrate die du an die Bank zahlst.</dd>
+                  <dt>Rate-Anteil Einkommen (%)</dt><dd>Der Prozentsatz deines Einkommens den du für die Rate einplanen möchtest.</dd>
+                  <dt>→ Benötigtes Nettoeinkommen</dt><dd>Das monatliche Nettoeinkommen das du mindestens verdienen musst: Rate ÷ Rate-Anteil.</dd>
+                </dl>
+              </div>
+              <div class="glossary-group">
+                <h4>Laufende Kosten & Gesamtkosten</h4>
+                <dl>
+                  <dt>Betriebskosten (mtl.)</dt><dd>2,3% p.a. ÷ 12 Monate.</dd>
+                  <dt>Gesamtbelastung (mtl.)</dt><dd>Rate + Betriebskosten.</dd>
+                  <dt>Belastungsquote (%)</dt><dd>Gesamtbelastung ÷ benötigtes Einkommen × 100.</dd>
                   <dt>Aufgelaufene Nebenkosten</dt><dd>Zinsen + Kaufnebenkosten.</dd>
-                  <dt>Nebenkosten-Anteil (%)</dt><dd>Aufgelaufene Nebenkosten ÷ Kaufpreis netto × 100.</dd>
-                  <dt>Betriebskosten gesamt</dt><dd>Monatliche Betriebskosten × Laufzeit in Monaten.</dd>
-                  <dt>Gesamtbelastung gesamt</dt><dd>Monatliche Gesamtbelastung × Laufzeit in Monaten.</dd>
-                  <dt>Totale Gesamtkosten</dt><dd>Alle Belastungen + Kaufpreis über die gesamte Laufzeit.</dd>
+                  <dt>Totale Gesamtkosten</dt><dd>Alle Belastungen + Kaufpreis brutto.</dd>
                 </dl>
               </div>
             </div>
@@ -131,7 +129,7 @@
     </div>
 
     <!-- ===== BUTTONS ===== -->
-    <div class="container cta-section" style="padding-top: 0;">
+    <div class="container cta-section" style="padding-top:0;">
       <button type="button" onclick="window.history.back()" class="btn-secondary">← Zurück</button>
     </div>
 
@@ -140,7 +138,7 @@
   <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <p class="footer-copy">©Poramet "PoIsCoding" Bahnschulte · v2.1.0</p>
+      <p class="footer-copy">©Poramet "PoIsCoding" Bahnschulte · v2.2.0</p>
       <p class="footer-hint">Die angezeigten Zahlen können um ± 10 % abweichen und dienen nur zur groben Orientierung.</p>
       <p class="footer-links">
         <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
@@ -150,50 +148,48 @@
     </div>
   </footer>
 
-  <!-- Skripte: berechnungen zuerst (Logger), dann helpers -->
-  <!-- html2pdf.js: kombiniert html2canvas + jsPDF für PDF-Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- Skripte: berechnungen.js (Logger + formatNumber), dann reverseBerechnung -->
   <script src="js/berechnungen.js"></script>
-  <script src="js/functions.js"></script>
+  <script src="js/reverseBerechnung.js"></script>
   <script>
     /**
-     * Initialisierung der Ergebnisseite.
-     * Liest Daten aus sessionStorage und rendert die Tabelle.
+     * Ergebnisseite initialisieren:
+     * Daten aus sessionStorage lesen und Tabelle rendern.
      */
     document.addEventListener('DOMContentLoaded', function () {
-      Logger.info('ergebnisse.html: DOMContentLoaded');
+      Logger.info('reverse-ergebnisse.html: DOMContentLoaded');
 
-      const container = document.getElementById('results-container');
-      const raw       = sessionStorage.getItem('calcData');
+      const container = document.getElementById('rev-results-container');
+      const raw       = sessionStorage.getItem('reverseCalcData');
 
-      // Keine Daten → Hinweis anzeigen
+      // Keine Daten vorhanden
       if (!raw) {
-        Logger.warn('ergebnisse.html: Keine calcData in sessionStorage gefunden');
+        Logger.warn('reverse-ergebnisse.html: Keine reverseCalcData in sessionStorage');
         container.innerHTML = `
           <div class="empty-state">
             <p>⚠️ Keine Berechnungsdaten gefunden.</p>
             <p>Bitte gehe zurück und fülle das Formular aus.</p>
-            <button type="button" onclick="window.history.back()" class="btn-primary" style="margin-top:16px;">← Zurück</button>
+            <button type="button" onclick="window.location.href='reverse.html'"
+                    class="btn-primary" style="margin-top:16px;">← Zurück zum Formular</button>
           </div>`;
         return;
       }
 
-      // Daten parsen
+      // JSON parsen
       let inputData;
       try {
         inputData = JSON.parse(raw);
-        Logger.info('ergebnisse.html: Daten aus sessionStorage geladen ✓');
+        Logger.info('reverse-ergebnisse.html: Daten aus sessionStorage geladen ✓');
       } catch (err) {
-        Logger.error('ergebnisse.html: JSON-Parsefehler:', err);
-        container.innerHTML = '<p class="error-msg">Fehler beim Laden der Daten. Bitte gehe zurück.</p>';
+        Logger.error('reverse-ergebnisse.html: JSON-Parsefehler:', err);
+        container.innerHTML = '<p style="padding:20px;color:red;">Fehler beim Laden der Daten. Bitte gehe zurück.</p>';
         return;
       }
 
       // Tabelle rendern
-      renderResults(inputData);
+      renderReverseResults(inputData);
     });
   </script>
-  <script src="js/pdfExport.js"></script>
 
 </body>
 </html>
