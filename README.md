@@ -1,61 +1,118 @@
-
-
-# Potenzieller Immo-Kauf
+# Immo-Rechner | Potenzieller Immobilienkauf
 
 ## Projektbeschreibung
-"Potenzieller Immo-Kauf" ist eine Webanwendung, mit der Nutzer auf Basis ihres Nettoeinkommens, gewünschter Kreditrate, Eigenkapitalanteils, Zinssätze und Laufzeiten verschiedene Finanzierungsszenarien für einen Immobilienkauf vergleichen können. Die Anwendung berechnet alle relevanten Faktoren wie Darlehenssumme, Gesamtzinsen, Kaufnebenkosten, Betriebskosten und Gesamtbelastungen.
+„Immo-Rechner" ist eine Webanwendung für Österreich, mit der Nutzer zwei Berechnungsrichtungen durchführen können:
+
+- **Vorwärts-Rechner:** Auf Basis des Nettoeinkommens wird der maximale Kaufpreis berechnet.
+- **Rückwärts-Rechner:** Auf Basis eines Wunschkaufpreises wird das benötigte Nettoeinkommen ermittelt.
+
+Beide Modi unterstützen bis zu 3 Szenarien und bis zu 5 Laufzeiten gleichzeitig. Alle österreichischen Kaufnebenkosten (Grunderwerbssteuer, Grundbuch, Hypothek, Makler, Notar, Sonstiges) werden automatisch eingerechnet.
+
+---
 
 ## Funktionen
-- **Eingabemaske (`index.html`):**
-  - Nettoeinkommen pro Szenario (3 Felder, jeweils formatiert)
-  - Maximale Monatsrate (Slider, 1–40 %)
-  - Eigenkapitalanteil (Slider, 20–80 %)
-  - Zinssätze (vorausgefüllt: 3 %, 4 %, 5 %)
-  - Laufzeiten (vorausgefüllt: 20 , 25 , 30 , 35 , 40 Jahre)
-  - Kaufnebenkosten-Sätze (Grunderwerbssteuer, Grundbucheintragung, Hypothekeneintragung, Maklergebühr, Notar-/Rechtsanwaltskosten inkl. 20 % MwSt., sonstige Kosten)
-  - Monatliche Fixkosten (frei wählbar)
-  - Dynamische Anzeige des Eurobetrags bei Slider-Änderungen
-  - Drei Vergleichsszenarien („Szenario 1“, „Szenario 2“, „Szenario 3“) mit jeweils eigenem Nettoeinkommen sowie Rate, Eigenkapital und Zinssatz
-  - Button zum Berechnen der Ergebnisse
 
-- **Ergebnisseite (`ergebnisse.html` & `js/umschalten.js`):**
-  - Anzeige einer scrollbaren Tabelle mit allen berechneten Werten:
-    - Darlehenssumme (Annuitätenformel) und Gesamtzinsen
-    - Rückzahlung an Bank
-    - Kaufpreis netto (Darlehenssumme – Nebenkosten + Eigenkapital)
-    - Eigenkapital (in Euro und Prozent)
-    - Aufgeschlüsselung der Kaufnebenkosten (Grunderwerbssteuer, Grundbuch-Eintragung, Kredit-/Hypothekeneintragung, Maklerkosten, Notar-/Rechtsanwaltskosten inkl. MwSt., sonstige Kosten) inklusive Summen und Prozentsätze
-    - Kaufkosten Brutto (Darlehenssumme + Eigenkapital)
-    - Betriebskosten monatlich (basierend auf vereinfachten Prozentsätzen: Strom, Wasser, Müll, Versicherung, Instandhaltung)
-    - Monatliche Gesamtbelastung (Monatsrate + Betriebskosten) und Anteil am Nettoeinkommen (%)
-    - Monatliche Gesamtbelastung inkl. Fixkosten
-    - Aufgelaufene Nebenkosten und ihr Anteil am Kaufpreis netto (%)
-    - Betriebskosten gesamt über die gewählte Laufzeit
-    - Gesamtbelastung gesamt über die Laufzeit
-    - Totale Gesamtkosten (Gesamtbelastung gesamt + Kaufkosten Brutto)
-  - Hervorhebung von Zeilen in Hellrot, wenn die monatliche Gesamtbelastung inkl. Fixkosten das Nettoeinkommen übersteigt
-  - Hellgrüne Hervorhebung der Spalte "Kaufpreis netto"
-  - Mouseover-Funktion: Anzeigen der Berechnungsformeln als Tooltip bei Hover über die Spaltentitel
-  - Ab Version 1.3.0: Berechnungen berücksichtigen nun drei separate Nettoeinkommen pro Szenario-Block.
+### Startseite (`index.html`)
+- Mode-Auswahl: Vorwärts- oder Rückwärts-Rechner wählen
+- Weiterleitung auf die jeweilige Eingabeseite
 
-- **Stylesheet (`styles.css`):**
-  - Einheitliches Layout für Eingabemaske und Ergebnis-Tabelle
-  - Grid-System für Formulareingaben
-  - Responsives Design mit scrollbaren Tabellen
+### Vorwärts-Rechner (`index.html`)
+- Nettoeinkommen pro Szenario (3 Felder, deutsches Zahlenformat)
+- Maximale Monatsrate (Slider, 1–40 % des Nettoeinkommens)
+- Eigenkapitalanteil (Slider, 0–80 %)
+- Zinssatz frei wählbar (%)
+- Monatliche Fixkosten frei wählbar (€)
+- 5 Laufzeiten frei eingebbar (Standard: 20 / 25 / 30 / 35 / 40 Jahre)
+- Dynamische Eurobetrag-Anzeige bei Slider-Änderungen
+- Button „Berechnen" → Weiterleitung auf `ergebnisse.html`
+
+### Vorwärts-Ergebnisse (`ergebnisse.html`)
+- Scrollbare Tabelle: eine Zeile pro Szenario × Laufzeit-Kombination
+- Berechnete Werte je Zeile: Darlehenssumme, Kaufpreis netto/brutto, Eigenkapital, alle Kaufnebenkosten aufgeschlüsselt, Gesamtzinsen, Monatsrate, Betriebskosten, Gesamtbelastung monatlich und über die Laufzeit, Totale Gesamtkosten
+- Grüne Hervorhebung: Spalte „Kaufpreis netto" (Zielkaufpreis)
+- Rote Zeilenmarkierung: wenn Gesamtbelastung das Nettoeinkommen übersteigt
+- Grüne Trennlinie zwischen Szenarien
+- Tooltip-Infos bei Hover über Spaltentitel
+- PDF-Export vorbereitet (aktuell `hidden`, kann aktiviert werden)
+
+### Rückwärts-Rechner (`reverse.html`)
+- Kaufpreis netto pro Szenario (3 Felder, deutsches Zahlenformat)
+- Eigenanteil (Slider, 0–80 % – zeigt absoluten € Betrag live an)
+- Zinssatz frei wählbar (%)
+- Rate-Anteil des Nettoeinkommens (Slider, 10–40 %)
+- 5 Laufzeiten frei eingebbar (Standard: 20 / 25 / 30 / 35 / 40 Jahre)
+- Button „Berechnen" → Weiterleitung auf `reverse-ergebnisse.html`
+
+### Rückwärts-Ergebnisse (`reverse-ergebnisse.html`)
+- Scrollbare Tabelle: eine Zeile pro Szenario × Laufzeit-Kombination (max. 15 Zeilen)
+- Verbundene Zellen (`rowspan`) für alle szenarioidenten Werte: Kaufpreis, Nebenkosten, Eigenkapital, Darlehenssumme, Zinssatz, Rate-Anteil, Betriebskosten mtl.
+- Gelbe Hervorhebung: Spalte „→ Monatliche Rate"
+- Blaue Hervorhebung: Spalte „→ Benötigtes Nettoeinkommen"
+- Grüne Hervorhebung: Spalte „Kaufpreis netto"
+- Grüne Trennlinie zwischen Szenarien
+- Aufklappbare Spalten-Erklärung (Glossar)
+- PDF-Export vorbereitet (aktuell `hidden`, kann aktiviert werden)
+
+---
+
+## Berechnungsgrundlagen (Österreich)
+
+| Kostenpunkt               | Ansatz                        |
+|---------------------------|-------------------------------|
+| Grunderwerbssteuer        | 3,5 % des Kaufpreises netto   |
+| Grundbucheintragung       | 1,1 % des Kaufpreises netto   |
+| Hypothekeneintragung      | 1,2 % des Kaufpreises netto   |
+| Maklerkosten              | 3,6 % inkl. MwSt.             |
+| Notar / Rechtsanwalt      | 1,5 % × 1,20 inkl. MwSt.     |
+| Sonstige Kosten           | 1,0 % des Kaufpreises netto   |
+| Betriebskosten            | 2,3 % p.a. ÷ 12 Monate       |
+
+Kreditrate: Annuitätenformel `R = D × i / (1 - (1+i)^(-n))`  
+Alle Angaben sind Richtwerte mit ± 10 % Varianz ohne Gewähr.
+
+---
 
 ## Dateistruktur
+
 ```
-├── index.html            # Eingabemaske
-├── ergebnisse.html       # Ergebnis-Tabelle
-├── styles.css            # CSS-Styling für Eingabe und Ergebnisse
-├── js
-│   ├── berechnungen.js   # Helferfunktionen für finanzmathematische Berechnungen (optional)
-│   └── umschalten.js     # Logik zur Generierung der Ergebnis-Tabelle
-├── images
-│   └── icon.png          # Icon für die Website
-├── changelog.md          # Versions-Historie
-└── README.md             # Projektbeschreibung (diese Datei)
+├── index.html                 # Startseite + Vorwärts-Rechner (Eingabe)
+├── ergebnisse.html            # Vorwärts-Rechner (Ergebnisse)
+├── reverse.html               # Rückwärts-Rechner (Eingabe)
+├── reverse-ergebnisse.html    # Rückwärts-Rechner (Ergebnisse)
+├── styles.css                 # Gemeinsames CSS für alle Seiten
+├── js/
+│   ├── berechnungen.js        # Logger, formatNumber(), calcLoan(), Nebenkostenberechnung
+│   ├── formHandler.js         # Formular-Submit & sessionStorage (Vorwärts)
+│   ├── functions.js           # Slider-Events, renderResults() (Vorwärts)
+│   ├── reverseHandler.js      # Formular-Submit & sessionStorage (Rückwärts)
+│   ├── reverseBerechnung.js   # calcReverseMetrics(), renderReverseResults() (Rückwärts)
+│   └── pdfExport.js           # PDF-Export via html2pdf.js (vorbereitet)
+├── images/
+│   └── icon.png               # Favicon und Header-Logo
+└── README.md                  # Projektbeschreibung (diese Datei)
 ```
 
+> `js/save.js` ist ein veraltetes Relikt und kann gelöscht werden.
+
+---
+
+## Technologie
+
+- Reines HTML / CSS / Vanilla JavaScript – keine Frameworks, kein Build-Tool
+- Google Fonts: Sora + DM Mono
+- PDF-Export: [html2pdf.js](https://github.com/eKoopmans/html2pdf.js) via CDN (vorbereitet)
+- Datenweitergabe zwischen Seiten: `sessionStorage`
+- Logger: globaler `Logger`-Wrapper (info / debug / warn / error) in `berechnungen.js`
+
+---
+
+## Version
+
+Aktuelle Version: **v2.3.0**  
+Changelog: siehe `changelog.md`
+
+---
+
 ## Lizenz
+
 Dieses Projekt steht unter der MIT-Lizenz. Details sind in der Datei `LICENSE` zu finden.
