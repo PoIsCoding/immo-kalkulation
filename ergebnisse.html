@@ -25,7 +25,7 @@
       </div>
       <nav class="header-nav">
         <button type="button" onclick="window.history.back()" class="nav-btn-outline">← Zurück</button>
-        <button type="button" id="download-csv" class="nav-btn">⬇ CSV Export</button>
+        <button type="button" id="download-pdf" class="nav-btn">⬇ PDF speichern</button>
       </nav>
     </div>
   </header>
@@ -140,7 +140,7 @@
   <!-- ===== FOOTER ===== -->
   <footer class="site-footer">
     <div class="footer-inner">
-      <p class="footer-copy">©Poramet "PoIsCoding" Bahnschulte · v2.0.0</p>
+      <p class="footer-copy">©Poramet "PoIsCoding" Bahnschulte · v2.1.0</p>
       <p class="footer-hint">Die angezeigten Zahlen können um ± 10 % abweichen und dienen nur zur groben Orientierung.</p>
       <p class="footer-links">
         <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
@@ -150,7 +150,9 @@
     </div>
   </footer>
 
-  <!-- Skripte: berechnungen zuerst (Logger), dann helpers, dann save -->
+  <!-- Skripte: berechnungen zuerst (Logger), dann helpers -->
+  <!-- html2pdf.js: kombiniert html2canvas + jsPDF für PDF-Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script src="js/berechnungen.js"></script>
   <script src="js/functions.js"></script>
   <script>
@@ -191,7 +193,7 @@
       renderResults(inputData);
     });
   </script>
-  <script src="js/save.js"></script>
+  <script src="js/pdfExport.js"></script>
 
 </body>
 </html>
