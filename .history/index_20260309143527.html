@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Immo-Rechner | Potenzieller Immobilienkauf</title>
+  <link rel="icon" type="image/png" href="images/icon.png" />
+  <meta name="google-site-verification" content="OebpSrpdOOnlX1MwLxe4LWUMGTrTNdWLM9lb52rY8VM" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="images/icon.png" alt="Immo-Rechner Logo" class="logo-img" />
+        <div>
+          <span class="logo-title">Immo-Rechner</span>
+          <span class="logo-sub">Potenzieller Immobilienkauf</span>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <a href="https://github.com/PoIsCoding" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
+        <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer" class="nav-btn">☕ Snack-Spende</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Österreich · Richtwerte</div>
+      <h1 class="hero-title">Dein persönlicher<br>Immo-Rechner</h1>
+      <p class="hero-desc">
+        Wähle deinen Berechnungsweg – oder vergleiche beide Richtungen.
+      </p>
+      <div class="hero-chips">
+        <span class="chip">💡 Bis zu 3 Szenarien</span>
+        <span class="chip">📊 5 Laufzeiten</span>
+        <span class="chip">🔴 Budget-Warnung</span>
+        <span class="chip">📄 PDF-Export</span>
+      </div>
+      <p class="hero-hint">
+        ± 10 % Varianz · Alle Angaben sind Richtwerte ohne Gewähr
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== MODE-AUSWAHL ===== -->
+  <section class="mode-select-section">
+    <div class="container">
+      <div class="mode-cards">
+
+        <!-- Karte: Vorwärts (Was kann ich mir leisten?) -->
+        <a href="index.html" class="mode-card mode-card--active" id="mode-forward-link">
+          <div class="mode-card__icon">💰</div>
+          <div class="mode-card__content">
+            <h2 class="mode-card__title">Was kann ich mir leisten?</h2>
+            <p class="mode-card__desc">
+              Du kennst dein <strong>Nettoeinkommen</strong> und möchtest wissen,
+              welcher Kaufpreis für dich realistisch ist.
+            </p>
+          </div>
+          <div class="mode-card__arrow">→</div>
+        </a>
+
+        <!-- Karte: Rückwärts (Was muss ich verdienen?) -->
+        <a href="reverse.html" class="mode-card" id="mode-reverse-link">
+          <div class="mode-card__icon">🏠</div>
+          <div class="mode-card__content">
+            <h2 class="mode-card__title">Was muss ich verdienen?</h2>
+            <p class="mode-card__desc">
+              Du hast eine <strong>Wunschimmobilie</strong> im Kopf und möchtest wissen,
+              welches Einkommen du dafür brauchst.
+            </p>
+          </div>
+          <div class="mode-card__arrow">→</div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HAUPTFORMULAR ===== -->
+  <main class="main-content">
+    <div class="container">
+
+      <!-- Szenarien-Grid -->
+      <div class="section-header">
+        <h2 class="section-title">💰 Was kann ich mir leisten?</h2>
+        <p class="section-sub">Gib dein Nettoeinkommen ein – der Rechner zeigt dir den maximalen Kaufpreis. Es müssen nicht alle drei Szenarien ausgefüllt werden.</p>
+      </div>
+
+      <div class="scenarios-grid" id="scenarios-grid">
+
+        <!-- ===== SZENARIO 1 ===== -->
+        <div class="scenario-card" data-index="1">
+          <div class="card-header">
+            <span class="card-number">01</span>
+            <h3 class="card-title">Szenario 1</h3>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="net-income1">Nettoeinkommen (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="text" id="net-income1" name="netIncome1"
+                     placeholder="z.B. 3.000,00"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="max-rate1">
+              Max. Rate: <strong><span id="max-rate1-value">40</span>%</strong>
+              = <em id="max-rate1-abs" class="abs-value">0,00 €</em>
+            </label>
+            <input type="range" id="max-rate1" name="maxRate1"
+                   min="1" max="40" step="1" value="40"
+                   class="range-slider" data-index="1" />
+            <div class="range-labels"><span>1%</span><span>40%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="equity-share1">
+              Eigenkapital: <strong><span id="equity-share1-value">20</span>%</strong>
+            </label>
+            <input type="range" id="equity-share1" name="equityShare1"
+                   min="0" max="80" step="1" value="20"
+                   class="range-slider equity-slider" data-index="1" />
+            <div class="range-labels"><span>0%</span><span>80%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="interest-rate1">Zinssatz (%)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">%</span>
+              <input type="number" id="interest-rate1" name="interestRate1"
+                     step="0.01" min="0" max="20"
+                     placeholder="z.B. 3,50"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="fixed-costs1">Monatliche Fixkosten (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="number" id="fixed-costs1" name="fixedCosts1"
+                     step="0.01" min="0"
+                     placeholder="z.B. 800,00"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== SZENARIO 2 ===== -->
+        <div class="scenario-card" data-index="2">
+          <div class="card-header">
+            <span class="card-number">02</span>
+            <h3 class="card-title">Szenario 2</h3>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="net-income2">Nettoeinkommen (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="text" id="net-income2" name="netIncome2"
+                     placeholder="z.B. 4.500,00"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="max-rate2">
+              Max. Rate: <strong><span id="max-rate2-value">40</span>%</strong>
+              = <em id="max-rate2-abs" class="abs-value">0,00 €</em>
+            </label>
+            <input type="range" id="max-rate2" name="maxRate2"
+                   min="1" max="40" step="1" value="40"
+                   class="range-slider" data-index="2" />
+            <div class="range-labels"><span>1%</span><span>40%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="equity-share2">
+              Eigenkapital: <strong><span id="equity-share2-value">20</span>%</strong>
+            </label>
+            <input type="range" id="equity-share2" name="equityShare2"
+                   min="0" max="80" step="1" value="20"
+                   class="range-slider equity-slider" data-index="2" />
+            <div class="range-labels"><span>0%</span><span>80%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="interest-rate2">Zinssatz (%)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">%</span>
+              <input type="number" id="interest-rate2" name="interestRate2"
+                     step="0.01" min="0" max="20"
+                     placeholder="z.B. 3,50"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="fixed-costs2">Monatliche Fixkosten (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="number" id="fixed-costs2" name="fixedCosts2"
+                     step="0.01" min="0"
+                     placeholder="z.B. 800,00"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+        </div>
+
+        <!-- ===== SZENARIO 3 ===== -->
+        <div class="scenario-card" data-index="3">
+          <div class="card-header">
+            <span class="card-number">03</span>
+            <h3 class="card-title">Szenario 3</h3>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="net-income3">Nettoeinkommen (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="text" id="net-income3" name="netIncome3"
+                     placeholder="z.B. 6.000,00"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="max-rate3">
+              Max. Rate: <strong><span id="max-rate3-value">40</span>%</strong>
+              = <em id="max-rate3-abs" class="abs-value">0,00 €</em>
+            </label>
+            <input type="range" id="max-rate3" name="maxRate3"
+                   min="1" max="40" step="1" value="40"
+                   class="range-slider" data-index="3" />
+            <div class="range-labels"><span>1%</span><span>40%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="equity-share3">
+              Eigenkapital: <strong><span id="equity-share3-value">20</span>%</strong>
+            </label>
+            <input type="range" id="equity-share3" name="equityShare3"
+                   min="0" max="80" step="1" value="20"
+                   class="range-slider equity-slider" data-index="3" />
+            <div class="range-labels"><span>0%</span><span>80%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="interest-rate3">Zinssatz (%)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">%</span>
+              <input type="number" id="interest-rate3" name="interestRate3"
+                     step="0.01" min="0" max="20"
+                     placeholder="z.B. 3,50"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="fixed-costs3">Monatliche Fixkosten (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="number" id="fixed-costs3" name="fixedCosts3"
+                     step="0.01" min="0"
+                     placeholder="z.B. 800,00"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /scenarios-grid -->
+
+      <!-- ===== LAUFZEITEN ===== -->
+      <div class="terms-section">
+        <div class="section-header">
+          <h2 class="section-title">Laufzeiten</h2>
+          <p class="section-sub">Bis zu 5 Laufzeiten können verglichen werden.</p>
+        </div>
+
+        <div class="terms-grid">
+          <div class="term-item">
+            <label class="field-label" for="term1">Laufzeit 1 (Jahre)</label>
+            <input type="number" id="term1" name="term1" value="20" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="term2">Laufzeit 2 (Jahre)</label>
+            <input type="number" id="term2" name="term2" value="25" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="term3">Laufzeit 3 (Jahre)</label>
+            <input type="number" id="term3" name="term3" value="30" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="term4">Laufzeit 4 (Jahre)</label>
+            <input type="number" id="term4" name="term4" value="35" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="term5">Laufzeit 5 (Jahre)</label>
+            <input type="number" id="term5" name="term5" value="40" min="5" max="50" class="field-input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CTA-BUTTON ===== -->
+      <div class="cta-section">
+        <button type="button" id="calculate-btn" class="btn-primary">
+          <span class="btn-text">Berechnen</span>
+          <span class="btn-icon">→</span>
+        </button>
+        <p id="form-error" class="form-error"></p>
+      </div>
+
+      <!-- ===== INFO-KÄSTEN ===== -->
+      <div class="info-cards">
+        <div class="info-card">
+          <div class="info-icon">🏦</div>
+          <div>
+            <strong>Max. 40% Rate</strong>
+            <p>Banken finanzieren in der Regel maximal 40 % des Nettoeinkommens als monatliche Rate.</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">💰</div>
+          <div>
+            <strong>Min. 20% Eigenkapital</strong>
+            <p>Die Bank setzt üblicherweise mindestens 20 % Eigenkapital am Kaufpreis voraus.</p>
+          </div>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">📋</div>
+          <div>
+            <strong>Nebenkosten ~12–13%</strong>
+            <p>Grunderwerbssteuer, Grundbuch, Notar, Makler und Sonstiges summieren sich typischerweise auf rund 12–13 % des Kaufpreises.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">©Poramet "PoIsCoding" Bahnschulte · v2.2.0</p>
+      <p class="footer-hint">Die angezeigten Zahlen können um ± 10 % abweichen und dienen nur zur groben Orientierung.</p>
+      <p class="footer-links">
+        <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
+        ·
+        <a href="https://github.com/PoIsCoding" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Skripte am Ende: berechnungen zuerst (Logger), dann helpers, dann formHandler -->
+  <script src="js/berechnungen.js"></script>
+  <script src="js/functions.js"></script>
+  <script src="js/formHandler.js"></script>
+
+</body>
+</html>

@@ -12,49 +12,47 @@
    ============================================================ */
 :root {
   /* Farben */
-  --clr-bg: #f4f6f8;
-  --clr-surface: #ffffff;
-  --clr-surface-alt: #f0f4f1;
-  --clr-border: #dde3e8;
-  --clr-border-dark: #b0bec5;
+  --clr-bg:           #f4f6f8;
+  --clr-surface:      #ffffff;
+  --clr-surface-alt:  #f0f4f1;
+  --clr-border:       #dde3e8;
+  --clr-border-dark:  #b0bec5;
 
-  --clr-primary: #1a7a4a; /* Kräftiges Grün */
+  --clr-primary:      #1a7a4a;   /* Kräftiges Grün */
   --clr-primary-dark: #135c38;
-  --clr-primary-light: #e8f5ee;
-  --clr-accent: #2fb06a; /* Helleres Grün für Hover */
+  --clr-primary-light:#e8f5ee;
+  --clr-accent:       #2fb06a;   /* Helleres Grün für Hover */
 
-  --clr-text: #1a202c;
-  --clr-text-muted: #5a6a7a;
-  --clr-text-light: #8899aa;
+  --clr-text:         #1a202c;
+  --clr-text-muted:   #5a6a7a;
+  --clr-text-light:   #8899aa;
 
-  --clr-green-row: #d4f7d4;
-  --clr-red-row: #fde8e8;
-  --clr-red-text: #c0392b;
+  --clr-green-row:    #d4f7d4;
+  --clr-red-row:      #fde8e8;
+  --clr-red-text:     #c0392b;
 
-  --clr-header-bg: #111b14;
-  --clr-header-text: #e8f5ee;
+  --clr-header-bg:    #111b14;
+  --clr-header-text:  #e8f5ee;
 
   /* Typografie */
-  --font-body: "Sora", system-ui, sans-serif;
-  --font-mono: "DM Mono", "Courier New", monospace;
+  --font-body:        'Sora', system-ui, sans-serif;
+  --font-mono:        'DM Mono', 'Courier New', monospace;
 
   /* Abstände */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
+  --radius-sm:        6px;
+  --radius-md:        12px;
+  --radius-lg:        20px;
 
   /* Schatten */
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.13);
+  --shadow-sm:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:        0 4px 12px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.07);
+  --shadow-lg:        0 8px 30px rgba(0,0,0,.13);
 }
 
 /* ============================================================
    1. Reset & Base
    ============================================================ */
-*,
-*::before,
-*::after {
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -79,9 +77,7 @@ a {
   color: var(--clr-primary);
   text-decoration: none;
 }
-a:hover {
-  text-decoration: underline;
-}
+a:hover { text-decoration: underline; }
 
 /* ============================================================
    2. Layout-Helfer
@@ -162,10 +158,10 @@ a:hover {
   font-size: 0.9rem;
   padding: 6px 12px;
   border-radius: var(--radius-sm);
-  transition: background 0.2s;
+  transition: background .2s;
 }
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255,255,255,.1);
   text-decoration: none;
 }
 
@@ -179,9 +175,7 @@ a:hover {
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition:
-    background 0.2s,
-    transform 0.1s;
+  transition: background .2s, transform .1s;
 }
 .nav-btn:hover {
   background: var(--clr-accent);
@@ -196,16 +190,14 @@ a:hover {
   font-size: 0.85rem;
   font-weight: 500;
   padding: 6px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255,255,255,.3);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition:
-    background 0.2s,
-    border-color 0.2s;
+  transition: background .2s, border-color .2s;
 }
 .nav-btn-outline:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.5);
 }
 
 /* ============================================================
@@ -222,20 +214,12 @@ a:hover {
 
 /* Dezentes Muster im Hintergrund */
 .hero::before {
-  content: "";
+  content: '';
   position: absolute;
   inset: 0;
   background-image:
-    radial-gradient(
-      circle at 20% 50%,
-      rgba(47, 176, 106, 0.15) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(26, 122, 74, 0.2) 0%,
-      transparent 40%
-    );
+    radial-gradient(circle at 20% 50%, rgba(47,176,106,.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(26,122,74,.2) 0%, transparent 40%);
   pointer-events: none;
 }
 
@@ -247,8 +231,8 @@ a:hover {
 
 .hero-badge {
   display: inline-block;
-  background: rgba(47, 176, 106, 0.25);
-  border: 1px solid rgba(47, 176, 106, 0.5);
+  background: rgba(47,176,106,.25);
+  border: 1px solid rgba(47,176,106,.5);
   color: #a8e6c0;
   font-size: 0.78rem;
   font-weight: 600;
@@ -269,7 +253,7 @@ a:hover {
 
 .hero-desc {
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255,255,255,.8);
   max-width: 580px;
   margin-inline: auto;
   margin-bottom: 24px;
@@ -284,9 +268,9 @@ a:hover {
 }
 
 .chip {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.9);
   font-size: 0.82rem;
   padding: 5px 13px;
   border-radius: 100px;
@@ -294,7 +278,7 @@ a:hover {
 
 .hero-hint {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255,255,255,.4);
   letter-spacing: 0.3px;
 }
 
@@ -334,9 +318,7 @@ a:hover {
   border-radius: var(--radius-lg);
   padding: 24px;
   box-shadow: var(--shadow-sm);
-  transition:
-    box-shadow 0.2s,
-    transform 0.2s;
+  transition: box-shadow .2s, transform .2s;
 }
 
 .scenario-card:hover {
@@ -411,15 +393,11 @@ a:hover {
   border-radius: var(--radius-sm);
   background: #f9fafb;
   color: var(--clr-text);
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+  transition: border-color .2s, box-shadow .2s;
   -moz-appearance: textfield;
 }
 .field-input::-webkit-outer-spin-button,
-.field-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-}
+.field-input::-webkit-inner-spin-button { -webkit-appearance: none; }
 
 .field-input.with-icon {
   padding-left: 34px;
@@ -428,7 +406,7 @@ a:hover {
 .field-input:focus {
   outline: none;
   border-color: var(--clr-primary);
-  box-shadow: 0 0 0 3px rgba(26, 122, 74, 0.15);
+  box-shadow: 0 0 0 3px rgba(26,122,74,.15);
   background: #fff;
 }
 
@@ -447,11 +425,7 @@ a:hover {
   appearance: none;
   width: 100%;
   height: 5px;
-  background: linear-gradient(
-    to right,
-    var(--clr-primary) 0%,
-    var(--clr-border-dark) 0%
-  );
+  background: linear-gradient(to right, var(--clr-primary) 0%, var(--clr-border-dark) 0%);
   border-radius: 100px;
   outline: none;
   cursor: pointer;
@@ -467,14 +441,12 @@ a:hover {
   background: var(--clr-primary);
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
-  transition:
-    transform 0.15s,
-    box-shadow 0.15s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.25);
+  transition: transform .15s, box-shadow .15s;
 }
 .range-slider::-webkit-slider-thumb:hover {
   transform: scale(1.2);
-  box-shadow: 0 2px 8px rgba(26, 122, 74, 0.4);
+  box-shadow: 0 2px 8px rgba(26,122,74,.4);
 }
 .range-slider::-moz-range-thumb {
   width: 18px;
@@ -536,21 +508,16 @@ a:hover {
   border: none;
   border-radius: 100px;
   cursor: pointer;
-  box-shadow: 0 4px 16px rgba(26, 122, 74, 0.35);
-  transition:
-    background 0.2s,
-    transform 0.15s,
-    box-shadow 0.2s;
+  box-shadow: 0 4px 16px rgba(26,122,74,.35);
+  transition: background .2s, transform .15s, box-shadow .2s;
   letter-spacing: 0.2px;
 }
 .btn-primary:hover {
   background: var(--clr-primary-dark);
   transform: translateY(-2px);
-  box-shadow: 0 6px 22px rgba(26, 122, 74, 0.45);
+  box-shadow: 0 6px 22px rgba(26,122,74,.45);
 }
-.btn-primary:active {
-  transform: translateY(0);
-}
+.btn-primary:active { transform: translateY(0); }
 
 .btn-secondary {
   display: inline-flex;
@@ -565,10 +532,7 @@ a:hover {
   border: 2px solid var(--clr-primary);
   border-radius: 100px;
   cursor: pointer;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    transform 0.15s;
+  transition: background .2s, color .2s, transform .15s;
 }
 .btn-secondary:hover {
   background: var(--clr-primary);
@@ -576,10 +540,7 @@ a:hover {
   transform: translateY(-1px);
 }
 
-.btn-text,
-.btn-icon {
-  pointer-events: none;
-}
+.btn-text, .btn-icon { pointer-events: none; }
 
 .form-error {
   color: var(--clr-red-text);
@@ -664,7 +625,7 @@ a:hover {
   text-align: center;
   white-space: nowrap;
   padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255,255,255,.1);
   letter-spacing: 0.2px;
 }
 
@@ -733,8 +694,7 @@ a:hover {
 /* ============================================================
    13. Lade-Zustand & Leer-Zustand
    ============================================================ */
-.loading-state,
-.empty-state {
+.loading-state, .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -751,14 +711,10 @@ a:hover {
   border: 3px solid var(--clr-border);
   border-top-color: var(--clr-primary);
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin .8s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+@keyframes spin { to { transform: rotate(360deg); } }
 
 /* ============================================================
    14. Legende (Ergebnisseite)
@@ -786,20 +742,9 @@ a:hover {
   flex-shrink: 0;
 }
 
-.legend-green .legend-dot {
-  background: var(--clr-green-row);
-  border: 1px solid #5cb85c;
-}
-.legend-red .legend-dot {
-  background: var(--clr-red-row);
-  border: 1px solid #e74c3c;
-}
-.legend-sep {
-  background: var(--clr-primary);
-  border-radius: 2px;
-  height: 3px;
-  width: 20px;
-}
+.legend-green .legend-dot { background: var(--clr-green-row); border: 1px solid #5cb85c; }
+.legend-red   .legend-dot { background: var(--clr-red-row);   border: 1px solid #e74c3c; }
+.legend-sep   { background: var(--clr-primary); border-radius: 2px; height: 3px; width: 20px; }
 
 /* ============================================================
    15. Glossar (Details/Summary)
@@ -826,14 +771,10 @@ a:hover {
   align-items: center;
   gap: 8px;
   user-select: none;
-  transition: background 0.15s;
+  transition: background .15s;
 }
-.glossary-summary::-webkit-details-marker {
-  display: none;
-}
-.glossary-summary:hover {
-  background: var(--clr-primary-light);
-}
+.glossary-summary::-webkit-details-marker { display: none; }
+.glossary-summary:hover { background: var(--clr-primary-light); }
 .glossary-details[open] .glossary-summary {
   border-bottom: 1px solid var(--clr-border);
 }
@@ -902,12 +843,12 @@ a:hover {
 .footer-copy {
   font-size: 0.85rem;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255,255,255,.8);
 }
 
 .footer-hint {
   font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255,255,255,.4);
 }
 
 .footer-links {
@@ -916,82 +857,44 @@ a:hover {
 .footer-links a {
   color: var(--clr-accent);
 }
-.footer-links a:hover {
-  color: #fff;
-}
+.footer-links a:hover { color: #fff; }
 
 /* ============================================================
    17. Responsive Anpassungen
    ============================================================ */
 @media (max-width: 768px) {
-  .header-inner {
-    padding: 10px 16px;
-  }
-  .logo-sub {
-    display: none;
-  }
+  .header-inner { padding: 10px 16px; }
+  .logo-sub { display: none; }
 
-  .hero {
-    padding: 40px 16px 36px;
-  }
-  .hero-title {
-    font-size: 1.6rem;
-  }
+  .hero { padding: 40px 16px 36px; }
+  .hero-title { font-size: 1.6rem; }
 
-  .scenarios-grid {
-    grid-template-columns: 1fr;
-  }
+  .scenarios-grid { grid-template-columns: 1fr; }
 
-  .terms-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+  .terms-grid { grid-template-columns: repeat(3, 1fr); }
 
-  .info-cards {
-    grid-template-columns: 1fr;
-  }
+  .info-cards { grid-template-columns: 1fr; }
 
-  .results-legend {
-    gap: 10px;
-  }
+  .results-legend { gap: 10px; }
 
-  .glossary-grid {
-    grid-template-columns: 1fr;
-  }
+  .glossary-grid { grid-template-columns: 1fr; }
 
-  .btn-primary {
-    font-size: 0.95rem;
-    padding: 12px 28px;
-  }
+  .btn-primary { font-size: 0.95rem; padding: 12px 28px; }
 }
 
 @media (max-width: 480px) {
-  .header-nav .nav-link {
-    display: none;
-  }
-  .terms-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .hero-title {
-    font-size: 1.4rem;
-  }
-  .section-title {
-    font-size: 1.2rem;
-  }
+  .header-nav .nav-link { display: none; }
+  .terms-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-title { font-size: 1.4rem; }
+  .section-title { font-size: 1.2rem; }
 }
 
 /* ============================================================
    18. Print
    ============================================================ */
 @media print {
-  .site-header,
-  .hero,
-  .cta-section,
-  .site-footer,
-  .nav-btn,
-  .nav-btn-outline,
-  .glossary-details {
-    display: none !important;
-  }
+  .site-header, .hero, .cta-section, .site-footer, .nav-btn,
+  .nav-btn-outline, .glossary-details { display: none !important; }
 
   .results-table-wrap {
     max-height: none;
@@ -1000,10 +903,7 @@ a:hover {
     border: none;
   }
 
-  body {
-    background: white;
-    font-size: 11px;
-  }
+  body { background: white; font-size: 11px; }
 }
 
 /* ============================================================
@@ -1031,10 +931,7 @@ a:hover {
   padding: 18px 20px;
   text-decoration: none;
   color: var(--clr-text);
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s,
-    transform 0.15s;
+  transition: border-color .2s, box-shadow .2s, transform .15s;
   position: relative;
 }
 
@@ -1049,7 +946,7 @@ a:hover {
 .mode-card--active {
   border-color: var(--clr-primary);
   background: var(--clr-primary-light);
-  box-shadow: 0 0 0 3px rgba(26, 122, 74, 0.12);
+  box-shadow: 0 0 0 3px rgba(26,122,74,.12);
 }
 
 .mode-card__icon {
@@ -1082,7 +979,7 @@ a:hover {
   color: var(--clr-primary);
   font-weight: 700;
   flex-shrink: 0;
-  transition: transform 0.2s;
+  transition: transform .2s;
 }
 .mode-card:hover .mode-card__arrow {
   transform: translateX(4px);
@@ -1090,7 +987,7 @@ a:hover {
 
 /* Aktiv-Badge oben rechts */
 .mode-card--active::after {
-  content: "✓ Aktiv";
+  content: '✓ Aktiv';
   position: absolute;
   top: -1px;
   right: 14px;
@@ -1105,12 +1002,8 @@ a:hover {
 }
 
 @media (max-width: 600px) {
-  .mode-cards {
-    grid-template-columns: 1fr;
-  }
-  .mode-card__desc {
-    display: none;
-  }
+  .mode-cards { grid-template-columns: 1fr; }
+  .mode-card__desc { display: none; }
 }
 
 /* ============================================================
@@ -1123,8 +1016,8 @@ a:hover {
 }
 
 .hero-badge--reverse {
-  background: rgba(26, 122, 218, 0.25);
-  border-color: rgba(26, 122, 218, 0.5);
+  background: rgba(26,122,218,.25);
+  border-color: rgba(26,122,218,.5);
   color: #90c4f0;
 }
 
@@ -1151,7 +1044,7 @@ a:hover {
   background: #1a4a9a;
 }
 .range-slider--accent::-webkit-slider-thumb:hover {
-  box-shadow: 0 2px 8px rgba(26, 74, 154, 0.4);
+  box-shadow: 0 2px 8px rgba(26,74,154,.4);
 }
 .range-slider--accent::-moz-range-thumb {
   background: #1a4a9a;
@@ -1165,11 +1058,11 @@ a:hover {
 /* Button Rückwärts */
 .btn-primary--reverse {
   background: #1a4a9a;
-  box-shadow: 0 4px 16px rgba(26, 74, 154, 0.35);
+  box-shadow: 0 4px 16px rgba(26,74,154,.35);
 }
 .btn-primary--reverse:hover {
   background: #143a7a;
-  box-shadow: 0 6px 22px rgba(26, 74, 154, 0.45);
+  box-shadow: 0 6px 22px rgba(26,74,154,.45);
 }
 
 /* ============================================================
@@ -1215,223 +1108,4 @@ a:hover {
    gezielt auf die Zellen der letzten Laufzeit-Zeile eines Szenarios. */
 .results-table-wrap tbody tr.block-separator td {
   border-bottom: 3px solid var(--clr-primary) !important;
-}
-
-/* ============================================================
-   23. Help-Button & Popup
-   ============================================================ */
-
-/* Kleiner ? Button neben dem Label */
-.help-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 1.5px solid var(--clr-primary);
-  background: transparent;
-  color: var(--clr-primary);
-  font-size: 0.65rem;
-  font-weight: 700;
-  font-family: var(--font-body);
-  cursor: pointer;
-  line-height: 1;
-  margin-left: 6px;
-  vertical-align: middle;
-  flex-shrink: 0;
-  transition:
-    background 0.15s,
-    color 0.15s;
-  padding: 0;
-}
-.help-btn:hover,
-.help-btn:focus-visible {
-  background: var(--clr-primary);
-  color: #fff;
-  outline: none;
-}
-
-/* Overlay (halbtransparenter Hintergrund) */
-.help-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
-  z-index: 9000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-.help-overlay--visible {
-  opacity: 1;
-  pointer-events: all;
-}
-
-/* Popup-Karte */
-.help-popup {
-  position: relative;
-  background: var(--clr-surface);
-  border: 1px solid var(--clr-border);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  padding: 28px 32px 24px;
-  max-width: 480px;
-  width: 100%;
-  transform: translateY(8px);
-  transition: transform 0.2s;
-}
-.help-overlay--visible .help-popup {
-  transform: translateY(0);
-}
-
-.help-close {
-  position: absolute;
-  top: 12px;
-  right: 14px;
-  background: none;
-  border: none;
-  font-size: 1rem;
-  color: var(--clr-text-muted);
-  cursor: pointer;
-  padding: 4px 6px;
-  line-height: 1;
-  border-radius: 4px;
-  transition:
-    color 0.15s,
-    background 0.15s;
-}
-.help-close:hover {
-  color: var(--clr-text);
-  background: var(--clr-bg);
-}
-
-.help-title {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--clr-text);
-  margin: 0 0 12px;
-  padding-right: 24px;
-}
-.help-body {
-  font-size: 0.88rem;
-  color: var(--clr-text-muted);
-  line-height: 1.65;
-  margin: 0;
-}
-
-/* ============================================================
-   24. Progressive Szenario-Anzeige
-   ============================================================ */
-
-/* Hidden-State für Szenario-Cards */
-.scenario-card--hidden {
-  display: none !important;
-}
-.scenario-card--visible {
-  display: block;
-  animation: scenarioFadeIn 0.3s ease forwards;
-}
-
-@keyframes scenarioFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Remove-Button (✕) in der Card-Header */
-.card-remove-btn {
-  margin-left: auto;
-  background: none;
-  border: 1.5px solid var(--clr-border);
-  border-radius: 50%;
-  width: 26px;
-  height: 26px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  color: var(--clr-text-muted);
-  cursor: pointer;
-  transition:
-    border-color 0.15s,
-    color 0.15s,
-    background 0.15s;
-  flex-shrink: 0;
-  padding: 0;
-}
-.card-remove-btn:hover {
-  border-color: #e53e3e;
-  color: #e53e3e;
-  background: #fff5f5;
-}
-
-/* card-header braucht flex damit der Remove-Button ans rechte Ende wandert */
-.card-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Add-Button – wirkt wie eine gestrichelte Scenario-Card */
-.scenario-add-btn {
-  background: var(--clr-bg);
-  border: 2px dashed var(--clr-border);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-  cursor: pointer;
-  transition:
-    border-color 0.2s,
-    background 0.2s;
-  user-select: none;
-}
-.scenario-add-btn:hover,
-.scenario-add-btn:focus-visible {
-  border-color: var(--clr-primary);
-  background: var(--clr-primary-light);
-  outline: none;
-}
-.scenario-add-btn:focus-visible {
-  box-shadow: 0 0 0 3px rgba(26, 122, 74, 0.2);
-}
-
-.scenario-add-btn--hidden {
-  display: none !important;
-}
-
-.add-btn-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  color: var(--clr-text-muted);
-  transition: color 0.2s;
-}
-.scenario-add-btn:hover .add-btn-inner,
-.scenario-add-btn:focus-visible .add-btn-inner {
-  color: var(--clr-primary);
-}
-
-.add-btn-icon {
-  font-size: 2rem;
-  line-height: 1;
-  font-weight: 300;
-}
-
-.add-btn-label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  text-align: center;
-  line-height: 1.4;
 }
