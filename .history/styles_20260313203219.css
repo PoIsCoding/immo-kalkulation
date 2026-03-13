@@ -1440,21 +1440,19 @@ a:hover {
    25. Szenario 1 zentriert wenn alleine (--solo)
    ============================================================ */
 
-/*
- * Im Solo-Modus überschreiben wir das auto-fit Grid komplett.
- * Zwei gleich breite Spalten, zentriert im Container –
- * linke Spalte = Szenario-Card, rechte = Add-Button.
- * max-width pro Spalte begrenzt die Breite sinnvoll.
- */
+/* Im Solo-Modus: Grid auf 2 Spalten, erste Spalte = Card, zweite = Add-Button */
+/* Die Card selbst wird zentriert dargestellt */
 .scenarios-grid--solo {
-  grid-template-columns: minmax(0, 460px) minmax(0, 460px) !important;
-  justify-content: center !important;
+  display: grid;
+  grid-template-columns: minmax(0, 480px) minmax(0, 480px);
+  justify-content: center;
+  gap: var(--gap-grid, 20px);
 }
 
-/* Auf mobilen Geräten: einspaltig, Card nimmt volle Breite */
+/* Auf mobilen Geräten: immer einspaltig */
 @media (max-width: 768px) {
   .scenarios-grid--solo {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: 1fr;
   }
 }
 

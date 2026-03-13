@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Was muss ich verdienen? | Immo-Rechner</title>
+  <link rel="icon" type="image/png" href="images/icon.png" />
+  <meta name="google-site-verification" content="OebpSrpdOOnlX1MwLxe4LWUMGTrTNdWLM9lb52rY8VM" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <img src="images/icon.png" alt="Immo-Rechner Logo" class="logo-img" />
+        <div>
+          <span class="logo-title">Immo-Rechner</span>
+          <span class="logo-sub">Potenzieller Immobilienkauf</span>
+        </div>
+      </div>
+      <nav class="header-nav">
+        <a href="https://github.com/PoIsCoding" target="_blank" rel="noopener noreferrer" class="nav-link">GitHub</a>
+        <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer" class="nav-btn">☕ Snack-Spende</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero hero--reverse">
+    <div class="hero-inner">
+      <div class="hero-badge hero-badge--reverse">🏠 Rückwärts-Rechner</div>
+      <h1 class="hero-title">Was muss ich verdienen?</h1>
+      <p class="hero-desc">
+        Du hast eine Wunschimmobilie im Blick? Gib den Kaufpreis, Eigenanteil,
+        Zinssatz und Laufzeit ein – der Rechner zeigt dir, welches
+        Nettoeinkommen du dafür benötigst.
+      </p>
+      <div class="hero-chips">
+        <span class="chip">🏠 Bis zu 3 Szenarien</span>
+        <span class="chip">📊 Alle Kaufnebenkosten</span>
+        <span class="chip">💡 Benötigtes Einkommen</span>
+        <span class="chip">📉 Monatliche Rate</span>
+      </div>
+      <p class="hero-hint">
+        ± 10 % Varianz · Alle Angaben sind Richtwerte ohne Gewähr
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== MODE-AUSWAHL ===== -->
+  <section class="mode-select-section">
+    <div class="container">
+      <div class="mode-cards">
+        <a href="index.html" class="mode-card">
+          <div class="mode-card__icon">💰</div>
+          <div class="mode-card__content">
+            <h2 class="mode-card__title">Was kann ich mir leisten?</h2>
+            <p class="mode-card__desc">Du kennst dein <strong>Nettoeinkommen</strong> und möchtest den max. Kaufpreis wissen.</p>
+          </div>
+          <div class="mode-card__arrow">→</div>
+        </a>
+        <a href="reverse.html" class="mode-card mode-card--active">
+          <div class="mode-card__icon">🏠</div>
+          <div class="mode-card__content">
+            <h2 class="mode-card__title">Was muss ich verdienen?</h2>
+            <p class="mode-card__desc">Du hast eine <strong>Wunschimmobilie</strong> und möchtest wissen, welches Einkommen du brauchst.</p>
+          </div>
+          <div class="mode-card__arrow">→</div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HAUPTFORMULAR ===== -->
+  <main class="main-content">
+    <div class="container">
+
+      <div class="section-header">
+        <h2 class="section-title">🏠 Szenarien eingeben</h2>
+        <p class="section-sub">Gib Kaufpreis und Parameter ein. Es müssen nicht alle drei Szenarien ausgefüllt werden.</p>
+      </div>
+
+      <div class="scenarios-grid" id="scenarios-grid">
+
+        <!-- ===== SZENARIO 1 ===== -->
+        <div class="scenario-card scenario-card--reverse" data-index="1">
+          <div class="card-header">
+            <span class="card-number card-number--reverse">01</span>
+            <h3 class="card-title">Szenario 1</h3>
+          </div>
+
+          <!-- Kaufpreis -->
+          <div class="field-group">
+            <label class="field-label" for="purchase-price1">Kaufpreis netto (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="text" id="purchase-price1" name="purchasePrice1"
+                     placeholder="z.B. 350.000"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <!-- Eigenanteil-Slider -->
+          <div class="field-group">
+            <label class="field-label" for="equity-pct1">
+              Eigenanteil: <strong><span id="equity-pct1-value">20</span>%</strong>
+              = <em id="equity-pct1-abs" class="abs-value">0,00 €</em>
+            </label>
+            <input type="range" id="equity-pct1" name="equityPct1"
+                   min="0" max="80" step="1" value="20"
+                   class="range-slider" data-index="1" />
+            <div class="range-labels"><span>0%</span><span>80%</span></div>
+          </div>
+
+          <!-- Zinssatz -->
+          <div class="field-group">
+            <label class="field-label" for="rev-interest1">Zinssatz (%)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">%</span>
+              <input type="number" id="rev-interest1" name="revInterest1"
+                     step="0.01" min="0" max="20"
+                     placeholder="z.B. 3,50"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <!-- Rate-Anteil-Slider -->
+          <div class="field-group">
+            <label class="field-label" for="rate-pct1">
+              Rate = <strong><span id="rate-pct1-value">40</span>%</strong> des Nettoeinkommens
+            </label>
+            <input type="range" id="rate-pct1" name="ratePct1"
+                   min="10" max="40" step="1" value="40"
+                   class="range-slider range-slider--accent" data-index="1" />
+            <div class="range-labels"><span>10%</span><span>40%</span></div>
+          </div>
+
+        </div><!-- /Szenario 1 -->
+
+        <!-- ===== SZENARIO 2 ===== -->
+        <div class="scenario-card scenario-card--reverse" data-index="2">
+          <div class="card-header">
+            <span class="card-number card-number--reverse">02</span>
+            <h3 class="card-title">Szenario 2</h3>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="purchase-price2">Kaufpreis netto (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="text" id="purchase-price2" name="purchasePrice2"
+                     placeholder="z.B. 500.000"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="equity-pct2">
+              Eigenanteil: <strong><span id="equity-pct2-value">20</span>%</strong>
+              = <em id="equity-pct2-abs" class="abs-value">0,00 €</em>
+            </label>
+            <input type="range" id="equity-pct2" name="equityPct2"
+                   min="0" max="80" step="1" value="20"
+                   class="range-slider" data-index="2" />
+            <div class="range-labels"><span>0%</span><span>80%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rev-interest2">Zinssatz (%)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">%</span>
+              <input type="number" id="rev-interest2" name="revInterest2"
+                     step="0.01" min="0" max="20"
+                     placeholder="z.B. 3,50"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rate-pct2">
+              Rate = <strong><span id="rate-pct2-value">40</span>%</strong> des Nettoeinkommens
+            </label>
+            <input type="range" id="rate-pct2" name="ratePct2"
+                   min="10" max="40" step="1" value="40"
+                   class="range-slider range-slider--accent" data-index="2" />
+            <div class="range-labels"><span>10%</span><span>40%</span></div>
+          </div>
+
+        </div><!-- /Szenario 2 -->
+
+        <!-- ===== SZENARIO 3 ===== -->
+        <div class="scenario-card scenario-card--reverse" data-index="3">
+          <div class="card-header">
+            <span class="card-number card-number--reverse">03</span>
+            <h3 class="card-title">Szenario 3</h3>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="purchase-price3">Kaufpreis netto (€)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">€</span>
+              <input type="text" id="purchase-price3" name="purchasePrice3"
+                     placeholder="z.B. 700.000"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="equity-pct3">
+              Eigenanteil: <strong><span id="equity-pct3-value">20</span>%</strong>
+              = <em id="equity-pct3-abs" class="abs-value">0,00 €</em>
+            </label>
+            <input type="range" id="equity-pct3" name="equityPct3"
+                   min="0" max="80" step="1" value="20"
+                   class="range-slider" data-index="3" />
+            <div class="range-labels"><span>0%</span><span>80%</span></div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rev-interest3">Zinssatz (%)</label>
+            <div class="input-wrapper">
+              <span class="input-icon">%</span>
+              <input type="number" id="rev-interest3" name="revInterest3"
+                     step="0.01" min="0" max="20"
+                     placeholder="z.B. 3,50"
+                     class="field-input with-icon" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label class="field-label" for="rate-pct3">
+              Rate = <strong><span id="rate-pct3-value">40</span>%</strong> des Nettoeinkommens
+            </label>
+            <input type="range" id="rate-pct3" name="ratePct3"
+                   min="10" max="40" step="1" value="40"
+                   class="range-slider range-slider--accent" data-index="3" />
+            <div class="range-labels"><span>10%</span><span>40%</span></div>
+          </div>
+
+        </div><!-- /Szenario 3 -->
+
+      </div><!-- /scenarios-grid -->
+
+      <!-- ===== LAUFZEITEN ===== -->
+      <div class="terms-section">
+        <div class="section-header">
+          <h2 class="section-title">Laufzeiten</h2>
+          <p class="section-sub">Bis zu 5 Laufzeiten können verglichen werden – für jede wird eine eigene Zeile berechnet.</p>
+        </div>
+        <div class="terms-grid">
+          <div class="term-item">
+            <label class="field-label" for="rev-term1">Laufzeit 1 (Jahre)</label>
+            <input type="number" id="rev-term1" name="revTerm1" value="20" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term2">Laufzeit 2 (Jahre)</label>
+            <input type="number" id="rev-term2" name="revTerm2" value="25" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term3">Laufzeit 3 (Jahre)</label>
+            <input type="number" id="rev-term3" name="revTerm3" value="30" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term4">Laufzeit 4 (Jahre)</label>
+            <input type="number" id="rev-term4" name="revTerm4" value="35" min="5" max="50" class="field-input" />
+          </div>
+          <div class="term-item">
+            <label class="field-label" for="rev-term5">Laufzeit 5 (Jahre)</label>
+            <input type="number" id="rev-term5" name="revTerm5" value="40" min="5" max="50" class="field-input" />
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== CTA ===== -->
+      <div class="cta-section">
+        <button type="button" id="rev-calculate-btn" class="btn-primary btn-primary--reverse">
+          <span class="btn-text">Berechnen</span>
+          <span class="btn-icon">→</span>
+        </button>
+        <p id="rev-form-error" class="form-error"></p>
+      </div>
+
+      <!-- ===== INFO-KÄSTEN ===== -->
+      <div class="info-cards">
+        <div class="info-card info-card--reverse">
+          <div class="info-icon">🔢</div>
+          <div>
+            <strong>Wie wird gerechnet?</strong>
+            <p>Aus dem Kaufpreis und dem Eigenanteil ergibt sich die Darlehenssumme. Über die Annuitätenformel berechnet sich die monatliche Rate – und daraus das benötigte Nettoeinkommen.</p>
+          </div>
+        </div>
+        <div class="info-card info-card--reverse">
+          <div class="info-icon">📋</div>
+          <div>
+            <strong>Nebenkosten ~12–13%</strong>
+            <p>Grunderwerbssteuer, Grundbuch, Notar, Makler und Sonstiges kommen on top auf den Kaufpreis.</p>
+          </div>
+        </div>
+        <div class="info-card info-card--reverse">
+          <div class="info-icon">⚙️</div>
+          <div>
+            <strong>Rate-Anteil</strong>
+            <p>Banken finanzieren max. ~40 % des Nettoeinkommens als Rate. Du kannst auch konservativere Werte (z.B. 30 %) testen.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /container -->
+  </main>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-copy">©Poramet "PoIsCoding" Bahnschulte · v2.2.0</p>
+      <p class="footer-hint">Die angezeigten Zahlen können um ± 10 % abweichen und dienen nur zur groben Orientierung.</p>
+      <p class="footer-links">
+        <a href="https://buymeacoffee.com/poiscoding" target="_blank" rel="noopener noreferrer">Buy Me a Coffee ☕</a>
+        ·
+        <a href="https://github.com/PoIsCoding" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- Skripte: berechnungen.js zuerst (Logger), dann reverseHandler -->
+  <script src="js/berechnungen.js"></script>
+  <script src="js/reverseHandler.js"></script>
+
+</body>
+</html>
